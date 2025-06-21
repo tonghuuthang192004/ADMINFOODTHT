@@ -3,13 +3,15 @@ import Clock from '../clock';
 import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { getProducts } from '../../api/api';
+import Swal from 'sweetalert2';
+
 
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  const [bulkStatus, setBulkStatus] = useState('active'); // trạng thái cập nhật hàng loạt
+  const [bulkSAction, setbulkSAction] = useState('active'); // trạng thái cập nhật hàng loạt
   const [message, setMessage] = useState('');
 
   const [filters, setFilters] = useState({
@@ -69,24 +71,60 @@ function ProductList() {
     }
   };
 
-  // Cập nhật trạng thái hàng loạt
-  const handleBulkUpdate = async () => {
-    if (selectedProducts.length === 0) {
-      setMessage('Vui lòng chọn ít nhất 1 sản phẩm');
-      return;
-    }
+  // Cập nhật trạng thái hàng loạt và xóa
+  const handleBulkAction = async () => {
+  if (selectedProducts.length === 0) {
+    setMessage('Vui lòng chọn ít nhất 1 sản phẩm');
+    return;
+  }
 
+  if (bulkSAction === 'delete') {
+   const result = await Swal.fire({
+    title: 'Bạn có chắc chắn?',
+    text: 'Sản phẩm sẽ được đưa vào thùng rác!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Xóa',
+    cancelButtonText: 'Hủy bỏ',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+  });
+  if(result.isConfirmed)
+  {
+  try {
+      const res = await fetch('http://localhost:3000/admin/products/delete-multiple', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: selectedProducts }),
+      });
+      const data = await res.json();
+      if (data.success) {
+      Swal.fire('Đã xóa!', `Đã xóa ${selectedProducts.length} sản phẩm.`, 'success');
+        setSelectedProducts([]);
+        setFilters((prev) => ({ ...prev }));
+      } else {
+      Swal.fire('Lỗi!', data.error || 'Xóa thất bại.', 'error');
+      }
+    } catch (error) {
+      console.error(error);
+    Swal.fire('Lỗi!', 'Lỗi khi xóa sản phẩm hàng loạt.', 'error');
+
+    }
+  }
+
+    
+  } else {
     try {
       const res = await fetch('http://localhost:3000/admin/products/change-multi', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids: selectedProducts, status: bulkStatus }),
+        body: JSON.stringify({ ids: selectedProducts, status: bulkSAction }),
       });
       const data = await res.json();
       if (data.success) {
         setMessage(`Đã cập nhật trạng thái cho ${selectedProducts.length} sản phẩm`);
         setSelectedProducts([]);
-        setFilters((prev) => ({ ...prev })); // reload danh sách
+        setFilters((prev) => ({ ...prev }));
       } else {
         setMessage(data.error || 'Cập nhật thất bại');
       }
@@ -94,9 +132,73 @@ function ProductList() {
       console.error(error);
       setMessage('Lỗi khi cập nhật trạng thái hàng loạt');
     }
-  };
+  }
+};
+
+
+
+  //   const deletedAll = async () => {
+  //   if (selectedProducts.length === 0) {
+  //     setMessage('Vui lòng chọn ít nhất 1 sản phẩm');
+  //     return;
+  //   }
+
+  //   try {
+  //     const res = await fetch('http://localhost:3000/admin/products/delete-multiple', {
+  //       method: 'DELETE',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ ids: selectedProducts, status: bulkStatus }),
+  //     });
+  //     const data = await res.json();
+  //     if (data.success) {
+  //       setMessage(`Da xoa  cho ${selectedProducts.length} sản phẩm`);
+  //       setSelectedProducts([]);
+  //       setFilters((prev) => ({ ...prev })); // reload danh sách
+  //     } else {
+  //       setMessage(data.error || 'xoa thất bại');
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     setMessage('Lỗi khi xoa hàng loạt');
+  //   }
+  // };
 
   if (loading) return <p>Đang tải dữ liệu...</p>;
+
+  // xóa mềm 
+
+
+  const hanldDelete = async(id)=>{
+  const result = await Swal.fire({
+    title: 'Bạn có chắc chắn?',
+    text: 'Sản phẩm sẽ được đưa vào thùng rác!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Xóa',
+    cancelButtonText: 'Hủy bỏ',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+  });
+    if (result.isConfirmed) {
+    try {
+      const res = await fetch(`http://localhost:3000/admin/products/deleted/${id}`, {
+        method: 'DELETE',
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        Swal.fire('Đã xóa!', 'Sản phẩm đã bị xóa.', 'success');
+        setFilters(prev => ({ ...prev })); // reload lại danh sách
+      } else {
+        Swal.fire('Lỗi!', data.message || 'Không thể xóa sản phẩm.', 'error');
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire('Lỗi!', 'Đã xảy ra lỗi khi xóa sản phẩm.', 'error');
+    }
+  }
+};
 
   return (
     <div className="app sidebar-mini rtl">
@@ -172,16 +274,17 @@ function ProductList() {
                 <div style={{ marginBottom: '1rem' }} className='selected_all'>
                   <div className='selected_product'>
               <select
-                    value={bulkStatus}
-                    onChange={(e) => setBulkStatus(e.target.value)}
+                    value={bulkSAction}
+                    onChange={(e) => setbulkSAction(e.target.value)}
                     className="form-control"
                     style={{ width: '150px', display: 'inline-block', marginRight: '10px' }}
                   >
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
+                    <option value="delete">Xóa tất cả</option>
                   </select>
-                  <button className="btn btn-primary" onClick={handleBulkUpdate}>
-                    Cập nhật trạng thái hàng loạt
+                  <button className="btn btn-primary" onClick={handleBulkAction}>
+                    Cập nhật 
                   </button>
                   </div>
                 
@@ -235,8 +338,8 @@ function ProductList() {
                         <td>{item.id_san_pham}</td>
                         <td>{item.ten}</td>
                         <td>
-                          <img src={item.hinh_anh || '/images/default-product.jpg'} alt={item.ten} width="100" />
-                        </td>
+<img src={item.hinh_anh?.startsWith('http') ? item.hinh_anh : `http://localhost:3000/uploads/${item.hinh_anh}`} alt={item.ten} width="100" />
+                 </td>
                         <td className="button_status">
                           <span
                             className={`badge ${item.trang_thai === 'active' ? 'bg-success' : 'bg-secondary'}`}
@@ -249,16 +352,21 @@ function ProductList() {
                         <td>{item.gia}</td>
                         <td>{item.id_danh_muc || 'Chưa rõ'}</td>
                         <td>
-                          <button className="btn btn-primary btn-sm trash" title="Xóa">
+                          <button className="btn btn-primary btn-sm trash" title="Xóa" onClick={() => hanldDelete(item.id_san_pham)} >
                             <i className="fa-solid fa-trash"></i>
                           </button>
                           <button
                             className="btn btn-primary btn-sm edit"
                             title="Sửa"
                             data-toggle="modal"
+                            button-delete
+                            data-id={item.id_san_pham}
                             data-target="#ModalUP"
                           >
-                            <i className="fas fa-edit"></i>
+                            <Link to="/EditProduct" >
+                             <i className="fas fa-edit"></i>
+                            </Link>
+                           
                           </button>
                         </td>
                       </tr>
@@ -300,36 +408,7 @@ function ProductList() {
       </main>
 
       {/* Modal chỉnh sửa sản phẩm */}
-      <div
-        className="modal fade"
-        id="ModalUP"
-        tabIndex="-1"
-        role="dialog"
-        aria-hidden="true"
-        data-backdrop="static"
-        data-keyboard="false"
-      >
-        <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content">
-            <div className="modal-body">
-              <div className="form-group col-md-12">
-                <h5>Chỉnh sửa thông tin sản phẩm cơ bản</h5>
-              </div>
-              <div className="form-group col-md-6">
-                <label className="control-label">Mã sản phẩm</label>
-                <input className="form-control" type="number" defaultValue="71309005" />
-              </div>
-              {/* Tiếp tục các input khác nếu cần */}
-              <button className="btn btn-save" type="button">
-                Lưu lại
-              </button>
-              <button className="btn btn-cancel" data-dismiss="modal" type="button">
-                Hủy bỏ
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+     
     </div>
   );
 }
