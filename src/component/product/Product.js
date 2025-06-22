@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { getProducts } from '../../api/api';
 import Swal from 'sweetalert2';
 
-
+import {FaEye } from 'react-icons/fa'
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -222,7 +222,7 @@ function ProductList() {
               <div className="tile-body">
                 <div className="row element-button">
                   <div className="col-sm-2">
-                    <Link className="btn btn-add btn-sm" to="/AddProduct" title="Thêm">
+                    <Link className="btn btn-add btn-sm" to="/admin/AddProduct" title="Thêm">
                       <i className="fas fa-plus"></i> Tạo mới Sản Phẩm
                     </Link>
                   </div>
@@ -286,6 +286,7 @@ function ProductList() {
                   <button className="btn btn-primary" onClick={handleBulkAction}>
                     Cập nhật 
                   </button>
+
                   </div>
                 
                   <div className='selected_id'>
@@ -351,7 +352,7 @@ function ProductList() {
                         </td>
                         <td>{item.gia}</td>
                         <td>{item.id_danh_muc || 'Chưa rõ'}</td>
-                        <td>
+                        <td className='button-action'>
                           <button className="btn btn-primary btn-sm trash" title="Xóa" onClick={() => hanldDelete(item.id_san_pham)} >
                             <i className="fa-solid fa-trash"></i>
                           </button>
@@ -363,11 +364,25 @@ function ProductList() {
                             data-id={item.id_san_pham}
                             data-target="#ModalUP"
                           >
-                            <Link to="/EditProduct" >
+                            <Link to={`/admin/EditProduct/${item.id_san_pham}`} >
                              <i className="fas fa-edit"></i>
                             </Link>
                            
                           </button>
+                             <button
+                            className="btn btn-primary btn-sm edit"
+                            title="Chi Tiet San Pham"
+                            data-toggle="modal"
+                            button-delete
+                            data-id={item.id_san_pham}
+                            data-target="#ModalUP"
+                          >
+                            <Link to={`/admin/ProductDetail/${item.id_san_pham}`} >
+                          <FaEye />
+                            </Link>
+                           
+                          </button>
+
                         </td>
                       </tr>
                     ))}

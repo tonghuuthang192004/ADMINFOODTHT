@@ -56,22 +56,25 @@ function Sidebar() {
             </a>
           </li>
           <li>
-            <Link className="app-menu__item" to="/Product">
+            <Link className="app-menu__item" to="/admin/Product">
               <FaBox className='app-menu__icon '/>
               <span className="app-menu__label">Quản lý sản phẩm</span>
             </Link>
           </li>
           <li>
-            <a className="app-menu__item" href="table-data-oder.html">
-           < FaClipboardList className='app-menu__icon '/>
+           <Link to="/admin/Order" className="app-menu__item">
+            < FaClipboardList className='app-menu__icon '/>
               <span className="app-menu__label">Quản lý đơn hàng</span>
-            </a>
+            
+           </Link>
+          
           </li>
           <li>
-            <a className="app-menu__item" href="table-data-banned.html">
-            <FaBuilding className='app-menu__icon ' />
-              <span className="app-menu__label">Quản lý nội bộ</span>
-            </a>
+            <Link className="app-menu__item" to="/admin/Category">
+              <FaBuilding className='app-menu__icon ' />
+              <span className="app-menu__label"> Quản Lý Danh Mục</span>
+            </Link>
+          
           </li>
           <li>
             <a className="app-menu__item" href="table-data-money.html">
