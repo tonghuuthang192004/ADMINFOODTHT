@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PasswordRecovery from './component/forgot/forgot';
 import DashBorad from './component/dashborad/dashboard';
 import  Product from './component/product/Product.index'
@@ -12,17 +12,21 @@ import Order from './component/order/index.order';
 import OrderDetail from './component/order/detail.order';
 import { elements } from 'chart.js';
 import IndexCategory from './component/category/catrgory.index';
+import IndexUser from './component/user/index.user';
+import UserDetail from './component/user/userDetail';
+import CreateUser from './component/user/createUser';
 const adminPath = '/admin';
 
 function App() {
     return(
-        <Router>
+        
 
 <Routes>
     <Route path='/' element={<Login />} />
     <Route path='/passwordRecovery' element={<PasswordRecovery />} />
 
     {/* Admin routes */}
+    
     <Route path={`${adminPath}/DashBorad`} element={<DashBorad />} />
     <Route path={`${adminPath}/Product`} element={<Product />} />
     <Route path={`${adminPath}/AddProduct`} element={<AddProduct />} />
@@ -31,9 +35,14 @@ function App() {
     <Route path={`${adminPath}/Order`} element={<Order />} />
     <Route path={`${adminPath}/OrderDetail/:id`} element={<OrderDetail />} />
     <Route path={`${adminPath}/Category`} element={<IndexCategory/>}/>
+    <Route path={`${adminPath}/IndexUser`} element={<IndexUser/>}/>
+    <Route path={`${adminPath}/UserDetail/:id_nguoi_dung`} element={<UserDetail/>}/>
+    <Route path={`${adminPath}/CreateUser`} element={<CreateUser/>}/>
+
+
 </Routes>
 
-        </Router>
+        
     )
 }
 

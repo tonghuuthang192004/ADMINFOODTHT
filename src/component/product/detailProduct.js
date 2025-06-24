@@ -4,6 +4,7 @@ import AppHeader from '../utils/header/header';
 
 import Sidebar from '../utils/sidebar/sidebar';
 import '../../css/style.css'
+import AdminLayOut from '../adminLayOut';
 function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -27,11 +28,10 @@ function ProductDetail() {
 
   return (
     <>
-    <AppHeader />
-      <Sidebar />
+  <AdminLayOut/>
 
         <div className="container mt-4 container-detail">
-      <Link to="/admin/Product" className="btn btn-secondary mb-3">← Quay lại danh sách</Link>
+      <a href="/admin/Product" className="btn btn-secondary mb-3">← Quay lại danh sách</a>
       <h2>Chi tiết sản phẩm #{product.id_san_pham}</h2>
       <div className="row">
         <div className="col-md-4">
@@ -62,9 +62,9 @@ function ProductDetail() {
                             data-id=""
                             data-target="#ModalUP"
                           >
-                            <Link to="/admin/EditProduct" >
+                            <a to="/admin/EditProduct" >
                              <i className="fas fa-edit"></i>
-                            </Link>
+                            </a>
                            
                           </button>
         </div>

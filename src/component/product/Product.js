@@ -222,9 +222,9 @@ function ProductList() {
               <div className="tile-body">
                 <div className="row element-button">
                   <div className="col-sm-2">
-                    <Link className="btn btn-add btn-sm" to="/admin/AddProduct" title="Thêm">
+                    <a className="btn btn-add btn-sm" href="/admin/AddProduct" title="Thêm">
                       <i className="fas fa-plus"></i> Tạo mới Sản Phẩm
-                    </Link>
+                    </a>
                   </div>
                 </div>
 
@@ -364,9 +364,9 @@ function ProductList() {
                             data-id={item.id_san_pham}
                             data-target="#ModalUP"
                           >
-                            <Link to={`/admin/EditProduct/${item.id_san_pham}`} >
+                            <a href={`/admin/EditProduct/${item.id_san_pham}`} >
                              <i className="fas fa-edit"></i>
-                            </Link>
+                            </a>
                            
                           </button>
                              <button
@@ -377,9 +377,9 @@ function ProductList() {
                             data-id={item.id_san_pham}
                             data-target="#ModalUP"
                           >
-                            <Link to={`/admin/ProductDetail/${item.id_san_pham}`} >
+                            <a href={`/admin/ProductDetail/${item.id_san_pham}`} >
                           <FaEye />
-                            </Link>
+                            </a>
                            
                           </button>
 

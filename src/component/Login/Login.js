@@ -5,10 +5,13 @@ import team from '../../images/team.jpg'
 // src/components/Login.js
 import { Link } from 'react-router-dom';
 
+import { useNavigate } from 'react-router-dom';
 
 import React, { useState } from 'react';
 
 function Login() {
+  const navigate = useNavigate();
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
@@ -26,10 +29,35 @@ function Login() {
     }));
   };
 
-  const handleLogin = () => {
-    // Bạn có thể xử lý form tại đây
-    alert(`Tài khoản: ${formData.username}, Mật khẩu: ${formData.password}`);
-  };
+ const handleLogin = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/admin/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: formData.username,
+        mat_khau: formData.password,
+      }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+if (response.ok && data) {
+  const nameOrEmail = data.ho_ten || data.email || 'Người dùng';
+    localStorage.setItem('user', JSON.stringify(data));
+
+ navigate('/admin/DashBorad')
+} else {
+  alert(data.message || 'Đăng nhập thất bại');
+}
+  } catch (error) {
+    console.error('Lỗi đăng nhập:', error);
+    alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+  }
+};
 
   return (
     <div className="limiter">

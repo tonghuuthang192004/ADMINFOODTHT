@@ -3,6 +3,7 @@ import axios from 'axios';
 import AppHeader from '../utils/header/header';
 import Sidebar from '../utils/sidebar/sidebar';
 import Swal from 'sweetalert2';
+import AdminLayOut from '../adminLayOut';
 
 const AddProduct = () => {
   const [category, setCategory] = useState([]);
@@ -109,8 +110,7 @@ const AddProduct = () => {
 
   return (
     <>
-      <AppHeader />
-      <Sidebar />
+      <AdminLayOut/>
       <main className="app-content">
         <div className="app-title">
           <ul className="app-breadcrumb breadcrumb">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AppHeader from '../utils/header/header';
 import Sidebar from '../utils/sidebar/sidebar';
+import AdminLayOut from '../adminLayOut';
 
 function EditProduct() {
   const { id } = useParams();
@@ -92,8 +93,7 @@ function EditProduct() {
 
   return (
     <>
-      <AppHeader />
-      <Sidebar />
+      <AdminLayOut/>
       <main className="app-content">
         <div className="app-title">
           <ul className="app-breadcrumb breadcrumb">

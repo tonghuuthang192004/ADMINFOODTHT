@@ -4,13 +4,24 @@ import '../../../css/util.css'
 import '../../../css/style.css'
 import { Link } from 'react-router-dom';
 import avatar from'../../../images/avatar.png'
+import React, { useEffect, useState } from 'react';
 
 import {
   FaUserTie, FaUsers, FaBox, FaClipboardList, FaChartLine,
   FaBuilding, FaFileInvoiceDollar,FaReact
-} from 'react-icons/fa'
+} 
+from 'react-icons/fa'
 import { DiReact } from 'react-icons/di';
 function Sidebar() {
+    const [user, setUser] = useState(null);
+
+  useEffect(()=>{
+    const storeUser=localStorage.getItem('user');
+    if(storeUser)
+    {
+      setUser(JSON.parse(storeUser));
+    }
+  })
   return (
     <>
       <div className="app-sidebar__overlay" data-toggle="sidebar"></div>
@@ -18,13 +29,13 @@ function Sidebar() {
         <div className="app-sidebar__user">
           <img
             className="app-sidebar__user-avatar"
-            src={avatar}
+            src={user?.avatar}
             width="50px"
             alt="User Image"
           />
           <div>
             <p className="app-sidebar__user-name">
-              <b>Huu Thang</b>
+              <b>{user?.ten}</b>
             </p>
             <p className="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
           </div>
@@ -43,37 +54,32 @@ function Sidebar() {
               <span className="app-menu__label">Bảng điều khiển</span>
             </a>
           </li>
+        
           <li>
-            <a className="app-menu__item" href="table-data-table.html">
-            < FaUserTie className='app-menu__icon ' />
-              <span className="app-menu__label">Quản lý nhân viên</span>
-            </a>
-          </li>
-          <li>
-            <a className="app-menu__item" href="#">
+            <a className="app-menu__item" href='/admin/IndexUser'>
            <FaUsers className='app-menu__icon '/>
-              <span className="app-menu__label">Quản lý khách hàng</span>
+              <span className="app-menu__label">Quản Lý Người Dùng</span>
             </a>
           </li>
           <li>
-            <Link className="app-menu__item" to="/admin/Product">
+            <a className="app-menu__item" href="/admin/Product">
               <FaBox className='app-menu__icon '/>
               <span className="app-menu__label">Quản lý sản phẩm</span>
-            </Link>
+            </a>
           </li>
           <li>
-           <Link to="/admin/Order" className="app-menu__item">
+           <a href="/admin/Order" className="app-menu__item">
             < FaClipboardList className='app-menu__icon '/>
               <span className="app-menu__label">Quản lý đơn hàng</span>
             
-           </Link>
+           </a>
           
           </li>
           <li>
-            <Link className="app-menu__item" to="/admin/Category">
+            <a className="app-menu__item" href="/admin/Category">
               <FaBuilding className='app-menu__icon ' />
               <span className="app-menu__label"> Quản Lý Danh Mục</span>
-            </Link>
+            </a>
           
           </li>
           <li>
