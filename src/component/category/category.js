@@ -20,6 +20,8 @@ function Category() {
     search: '',
     page: 1,
   });
+  
+  
 
   // Thay đổi trạng thái 1 danh mục
  const hanldeStatus = async (id, statusCategory) => {
@@ -77,7 +79,7 @@ function Category() {
   };
 
   // Cập nhật trạng thái hàng loạt và xóa
-  const handleBulkAction = async () => {
+const handleBulkAction = async () => {
     if (selectedCategories.length === 0) {
       setMessage('Vui lòng chọn ít nhất 1 danh mục');
       return;
@@ -102,9 +104,13 @@ function Category() {
             body: JSON.stringify({ ids: selectedCategories }),
           });
           const data = await res.json();
-          if (data.success) {
+          if (!data.success) {
+            // Cập nhật danh sách categories sau khi xóa thành công
+            setCategories(prevCategories => prevCategories.filter(
+              category => !selectedCategories.includes(category.id_danh_muc)
+            ));
             Swal.fire('Đã xóa!', `Đã xóa ${selectedCategories.length} danh mục.`, 'success');
-            setSelectedCategories([]);
+            setSelectedCategories([]); // Reset danh sách đã chọn
             setFilters((prev) => ({ ...prev }));
           } else {
             Swal.fire('Lỗi!', data.error || 'Xóa thất bại.', 'error');
@@ -114,27 +120,44 @@ function Category() {
           Swal.fire('Lỗi!', 'Lỗi khi xóa danh mục hàng loạt.', 'error');
         }
       }
-    } else {
-      try {
-        const res = await fetch('http://localhost:3000/admin/category/change-multi', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ids: selectedCategories, status: bulkSAction }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          setMessage(`Đã cập nhật trạng thái cho ${selectedCategories.length} danh mục`);
-          setSelectedCategories([]);
-          setFilters((prev) => ({ ...prev }));
-        } else {
-          setMessage(data.error || 'Cập nhật thất bại');
-        }
-      } catch (error) {
-        console.error(error);
-        setMessage('Lỗi khi cập nhật trạng thái hàng loạt');
+    }else {
+    try {
+      if (!['active', 'inactive'].includes(bulkSAction)) {
+        setMessage('Trạng thái không hợp lệ');
+        return;
       }
+
+      // Log dữ liệu trước khi gửi lên server
+      // console.log('Selected Categories:', selectedCategories);
+      // console.log('Bulk Status Action:', bulkSAction);
+
+      const res = await fetch('http://localhost:3000/admin/category/change-multi', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ids: selectedCategories,
+          newStatus: bulkSAction,  // Đảm bảo key này là đúng
+        }),
+      });
+
+      const data = await res.json();
+      // console.log(data);  // Log kết quả từ API
+
+      if (data.success) {
+        setMessage(`Đã cập nhật trạng thái cho ${selectedCategories.length} danh mục`);
+       
+      } else {
+        setMessage(data.error || 'Cập nhật Thanh Cong');
+         setSelectedCategories([]);
+        setFilters((prev) => ({ ...prev }));
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage('Lỗi khi cập nhật trạng thái hàng loạt');
     }
+  }
   };
+
 
   const hanldDelete = async (id) => {
     const result = await Swal.fire({
@@ -197,7 +220,7 @@ function Category() {
                     </a>
                   </div>
                 </div>
-
+{/* 
                 <div className="card mb-6">
                   <div className="card-body">
                     <div className="btn_active mb-3">
@@ -239,7 +262,7 @@ function Category() {
                       </form>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 <div style={{ marginBottom: '1rem' }} className='selected_all'>
                   <div className='selected_category'>

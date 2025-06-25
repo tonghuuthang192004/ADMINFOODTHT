@@ -33,6 +33,8 @@ function Login() {
   try {
     const response = await fetch('http://localhost:3000/admin/auth/login', {
       method: 'POST',
+        credentials: 'include', // <-- Cái này bắt buộc để cookie được gửi và nhận
+
       headers: {
         'Content-Type': 'application/json',
       },
