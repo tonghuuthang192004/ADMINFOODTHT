@@ -10,7 +10,7 @@ const CreateUser = () => {
     mat_khau: '',
     so_dien_thoai: '',
     id_vai_tro: 2, // default: user
-    trang_thai: '',
+    trang_thai: 'active',
       deleted: 0,
   });
 
@@ -141,9 +141,10 @@ const CreateUser = () => {
             </div>
             <div className="form-group">
               <label>Trạng thái</label>
-              <select name="trang_thai" className="form-control" value={formData.trang_thai} onChange={handleChange}>
-                <option value="active">active</option>
-                <option value="inactive">inactive</option>
+              <select name="trang_thai" className="form-control" value={formData.trang_thai} onChange={handleChange} required>
+          <option value="" disabled>-- Chọn trạng thái --</option>
+<option value="active">Hoạt động</option>
+<option value="inactive">Vô hiệu</option>
               </select>
             </div>
             <button type="submit" className="btn btn-primary">Thêm</button>

@@ -15,6 +15,10 @@ import IndexCategory from './component/category/catrgory.index';
 import IndexUser from './component/user/index.user';
 import UserDetail from './component/user/userDetail';
 import CreateUser from './component/user/createUser';
+import EditUser from './component/user/eidtUser';
+import DisCountMangerList from './component/discountManger/discountManger';
+import AddDisCountManger from './component/discountManger/creatDisCountManger';
+import EditDisCountManger from './component/discountManger/EditDisCountManger';
 const adminPath = '/admin';
 
 function App() {
@@ -30,14 +34,30 @@ function App() {
     <Route path={`${adminPath}/DashBorad`} element={<DashBorad />} />
     <Route path={`${adminPath}/Product`} element={<Product />} />
     <Route path={`${adminPath}/AddProduct`} element={<AddProduct />} />
+
+
     <Route path={`${adminPath}/EditProduct/:id`} element={<EditProduct />} />
     <Route path={`${adminPath}/ProductDetail/:id`} element={<ProductDetail />} />
+
+
+
     <Route path={`${adminPath}/Order`} element={<Order />} />
     <Route path={`${adminPath}/OrderDetail/:id`} element={<OrderDetail />} />
+
+
     <Route path={`${adminPath}/Category`} element={<IndexCategory/>}/>
+
+    
     <Route path={`${adminPath}/IndexUser`} element={<IndexUser/>}/>
     <Route path={`${adminPath}/UserDetail/:id_nguoi_dung`} element={<UserDetail/>}/>
     <Route path={`${adminPath}/CreateUser`} element={<CreateUser/>}/>
+    <Route path={`${adminPath}/edit-user/:id_nguoi_dung`} element={<EditUser/>}/>
+
+    
+
+    <Route path={`${adminPath}/Discountmanger`}element={<DisCountMangerList/>}/>
+    <Route path={`${adminPath}/AddDisCountManger`} element ={<AddDisCountManger/>}/>
+    <Route path={`${adminPath}/EditDisCountManger/:id_giam_gia`} element ={<EditDisCountManger/>}/>
 
 
 </Routes>

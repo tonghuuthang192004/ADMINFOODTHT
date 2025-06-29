@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import Clock from '../clock';
 import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { getProducts } from '../../api/api';
-import Swal from 'sweetalert2';
 
+import Swal from 'sweetalert2';
+import { getDisCountManger } from '../../api/api';
 import {FaEye } from 'react-icons/fa'
-function ProductList() {
-  const [products, setProducts] = useState([]);
+import AdminLayOut from '../adminLayOut';
+function DisCountMangerList() {
+  const [DisCountManger, setDisCountManger] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedDisCountManger, setSelectedDisCountManger] = useState([]);
 
   const [bulkSAction, setbulkSAction] = useState('active'); // trạng thái cập nhật hàng loạt
   const [message, setMessage] = useState('');
@@ -20,11 +21,11 @@ function ProductList() {
     page: 1,
   });
 
-  // Thay đổi trạng thái 1 sản phẩm
-  const hanldeStatus = async (id, statusProduct) => {
+  // Thay đổi trạng thái 1 Khuyến Mãi
+  const hanldeStatus = async (id, statusDisCountManger) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/admin/products/change-status/${statusProduct}/${id}`,
+        `http://localhost:3000/admin/DisCountManger/change-status/${statusDisCountManger}/${id}`,
         { method: 'PUT' }
       );
       const data = await response.json();
@@ -39,12 +40,12 @@ function ProductList() {
   // Lấy danh sách sản phẩm theo filter
   useEffect(() => {
     setLoading(true);
-    getProducts(filters)
+    getDisCountManger(filters)
       .then((data) => {
-        setProducts(data);
+        setDisCountManger(data);
         setLoading(false);
         // Reset selected nếu page hoặc filters thay đổi để tránh lỗi chọn sai
-        setSelectedProducts([]);
+        setSelectedDisCountManger([]);
       })
       .catch((error) => {
         console.error('Lỗi khi lấy sản phẩm:', error);
@@ -55,33 +56,33 @@ function ProductList() {
   // Chọn tất cả checkbox
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      const allIds = products.map((p) => p.id_san_pham);
-      setSelectedProducts(allIds);
+      const allIds = DisCountManger.map((p) => p.id_san_pham);
+      setSelectedDisCountManger(allIds);
     } else {
-      setSelectedProducts([]);
+      setSelectedDisCountManger([]);
     }
   };
 
   // Chọn từng checkbox
   const handleCheckboxChange = (e, id) => {
     if (e.target.checked) {
-      setSelectedProducts((prev) => [...prev, id]);
+      setSelectedDisCountManger((prev) => [...prev, id]);
     } else {
-      setSelectedProducts((prev) => prev.filter((pid) => pid !== id));
+      setSelectedDisCountManger((prev) => prev.filter((pid) => pid !== id));
     }
   };
 
   // Cập nhật trạng thái hàng loạt và xóa
   const handleBulkAction = async () => {
-  if (selectedProducts.length === 0) {
-    setMessage('Vui lòng chọn ít nhất 1 sản phẩm');
+  if (selectedDisCountManger.length === 0) {
+    setMessage('Vui lòng chọn ít nhất 1 Khuyến Mãi');
     return;
   }
 
   if (bulkSAction === 'delete') {
    const result = await Swal.fire({
     title: 'Bạn có chắc chắn?',
-    text: 'Sản phẩm sẽ được đưa vào thùng rác!',
+    text: 'Khuyến Mãi sẽ được đưa vào thùng rác!',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Xóa',
@@ -92,22 +93,22 @@ function ProductList() {
   if(result.isConfirmed)
   {
   try {
-      const res = await fetch('http://localhost:3000/admin/products/delete-multiple', {
+      const res = await fetch('http://localhost:3000/admin/DisCountManger/delete-multiple', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids: selectedProducts }),
+        body: JSON.stringify({ ids: selectedDisCountManger }),
       });
       const data = await res.json();
       if (data.success) {
-      Swal.fire('Đã xóa!', `Đã xóa ${selectedProducts.length} sản phẩm.`, 'success');
-        setSelectedProducts([]);
+      Swal.fire('Đã xóa!', `Đã xóa ${selectedDisCountManger.length} Khuyến Mãi.`, 'success');
+        setSelectedDisCountManger([]);
         setFilters((prev) => ({ ...prev }));
       } else {
       Swal.fire('Lỗi!', data.error || 'Xóa thất bại.', 'error');
       }
     } catch (error) {
       console.error(error);
-    Swal.fire('Lỗi!', 'Lỗi khi xóa sản phẩm hàng loạt.', 'error');
+    Swal.fire('Lỗi!', 'Lỗi khi xóa Khuyến Mãi hàng loạt.', 'error');
 
     }
   }
@@ -115,15 +116,15 @@ function ProductList() {
     
   } else {
     try {
-      const res = await fetch('http://localhost:3000/admin/products/change-multi', {
+      const res = await fetch('http://localhost:3000/admin/DisCountManger/change-multi', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids: selectedProducts, status: bulkSAction }),
+        body: JSON.stringify({ ids: selectedDisCountManger, status: bulkSAction }),
       });
       const data = await res.json();
       if (data.success) {
-        setMessage(`Đã cập nhật trạng thái cho ${selectedProducts.length} sản phẩm`);
-        setSelectedProducts([]);
+        setMessage(`Đã cập nhật trạng thái cho ${selectedDisCountManger.length} Khuyến Mãi`);
+        setSelectedDisCountManger([]);
         setFilters((prev) => ({ ...prev }));
       } else {
         setMessage(data.error || 'Cập nhật thất bại');
@@ -136,33 +137,6 @@ function ProductList() {
 };
 
 
-
-  //   const deletedAll = async () => {
-  //   if (selectedProducts.length === 0) {
-  //     setMessage('Vui lòng chọn ít nhất 1 sản phẩm');
-  //     return;
-  //   }
-
-  //   try {
-  //     const res = await fetch('http://localhost:3000/admin/products/delete-multiple', {
-  //       method: 'DELETE',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ ids: selectedProducts, status: bulkStatus }),
-  //     });
-  //     const data = await res.json();
-  //     if (data.success) {
-  //       setMessage(`Da xoa  cho ${selectedProducts.length} sản phẩm`);
-  //       setSelectedProducts([]);
-  //       setFilters((prev) => ({ ...prev })); // reload danh sách
-  //     } else {
-  //       setMessage(data.error || 'xoa thất bại');
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     setMessage('Lỗi khi xoa hàng loạt');
-  //   }
-  // };
-
   if (loading) return <p>Đang tải dữ liệu...</p>;
 
   // xóa mềm 
@@ -171,7 +145,7 @@ function ProductList() {
   const hanldDelete = async(id)=>{
   const result = await Swal.fire({
     title: 'Bạn có chắc chắn?',
-    text: 'Sản phẩm sẽ được đưa vào thùng rác!',
+    text: 'Khuyến Mãi sẽ được đưa vào thùng rác!',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Xóa',
@@ -181,26 +155,28 @@ function ProductList() {
   });
     if (result.isConfirmed) {
     try {
-      const res = await fetch(`http://localhost:3000/admin/products/deleted/${id}`, {
+      const res = await fetch(`http://localhost:3000/admin/DisCountManger/deleted/${id}`, {
         method: 'DELETE',
       });
 
       const data = await res.json();
 
       if (data.success) {
-        Swal.fire('Đã xóa!', 'Mã Khuyến Mãi đã bị xóa.', 'success');
+        Swal.fire('Đã xóa!', 'Khuyến Mãi đã bị xóa.', 'success');
         setFilters(prev => ({ ...prev })); // reload lại danh sách
       } else {
-        Swal.fire('Lỗi!', data.message || 'Không thể xóa sản phẩm.', 'error');
+        Swal.fire('Lỗi!', data.message || 'Không thể xóa Khuyến Mãi.', 'error');
       }
     } catch (error) {
       console.error(error);
-      Swal.fire('Lỗi!', 'Đã xảy ra lỗi khi xóa sản phẩm.', 'error');
+      Swal.fire('Lỗi!', 'Đã xảy ra lỗi khi xóa Khuyến Mãi.', 'error');
     }
   }
 };
 
   return (
+    <>
+     <AdminLayOut/>
     <div className="app sidebar-mini rtl">
       <main className="app-content">
         <div className="app-title">
@@ -222,16 +198,16 @@ function ProductList() {
               <div className="tile-body">
                 <div className="row element-button">
                   <div className="col-sm-2">
-                    <a className="btn btn-add btn-sm" href="/admin/AddProduct" title="Thêm">
-                      <i className="fas fa-plus"></i> Mã Khuyến Mãi Đã bị Xóa
+                    <a className="btn btn-add btn-sm" href="/admin/AddDisCountManger" title="Thêm">
+                      <i className="fas fa-plus"></i> Tạo mới Mã Khuyến Mãi
                     </a>
                   </div>
                 </div>
 
                 <div className="card mb-6">
                   <div className="card-body">
-                    <div className="btn_active mb-3">
-                   <button
+             <div className="btn_active mb-3">
+  <button
     className={`btn btn-sm me-2 ${filters.status === '' ? 'btn-success' : 'btn-outline-success'}`}
     onClick={() => setFilters({ status: '', search: '', page: 1 })}
   >
@@ -251,7 +227,9 @@ function ProductList() {
   >
     Dừng Hoạt Động
   </button>
-                    </div> 
+</div>
+
+
 
                     <div className="form-search mb-3">
                       <form
@@ -274,7 +252,7 @@ function ProductList() {
                 </div>
 
                 <div style={{ marginBottom: '1rem' }} className='selected_all'>
-                  <div className='selected_product'>
+                  <div className='selected_DisCountManger'>
               <select
                     value={bulkSAction}
                     onChange={(e) => setbulkSAction(e.target.value)}
@@ -292,11 +270,11 @@ function ProductList() {
                   </div>
                 
                   <div className='selected_id'>
-  <label>Danh sách ID sản phẩm được chọn:</label>
+  <label>Danh sách ID Khuyến Mãi được chọn:</label>
                   <input
                     type="text"
                     readOnly
-                    value={selectedProducts.join(', ')}
+                    value={selectedDisCountManger.join(', ')}
                     style={{ width: '100%', padding: '8px' }}
                   />
                   </div>
@@ -305,91 +283,101 @@ function ProductList() {
 
                 </div>
 
-                <table className="table table-hover table-bordered" id="sampleTable">
-                  <thead>
-                    <tr>
-                      <th width="10">
-                        {/* Checkbox chọn tất cả */}
-                        <input
-                          type="checkbox"
-                          id="all"
-                          checked={selectedProducts.length === products.length && products.length > 0}
-                          onChange={handleSelectAll}
-                        />
-                      </th>
-                      <th>Mã sản phẩm</th>
-                      <th>Tên sản phẩm</th>
-                      <th>Ảnh</th>
-                      <th>Tình trạng</th>
-                      <th>Giá tiền</th>
-                      <th>Danh mục</th>
-                      <th>Chức năng</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {products.map((item) => (
-                      <tr key={item.id_san_pham}>
-                        <td>
-                          <input
-                            type="checkbox"
-                            name="check1"
-                            value={item.id_san_pham}
-                            checked={selectedProducts.includes(item.id_san_pham)}
-                            onChange={(e) => handleCheckboxChange(e, item.id_san_pham)}
-                          />
-                        </td>
-                        <td>{item.id_san_pham}</td>
-                        <td>{item.ten}</td>
-                        <td>
-<img src={item.hinh_anh?.startsWith('http') ? item.hinh_anh : `http://localhost:3000/uploads/${item.hinh_anh}`} alt={item.ten} width="100" />
-                 </td>
-                        <td className="button_status">
-                          <span
-                            className={`badge ${item.trang_thai === 'active' ? 'bg-success' : 'bg-secondary'}`}
-                            onClick={() => hanldeStatus(item.id_san_pham, item.trang_thai)}
-                            style={{ cursor: 'pointer' }}
-                          >
-                            {item.trang_thai}
-                          </span>
-                        </td>
-                        <td>{item.gia}</td>
-                        <td>{item.ten_danh_muc || 'Chưa rõ'}</td>
-                        <td className='button-action'>
-                          <button className="btn btn-primary btn-sm trash" title="Xóa" onClick={() => hanldDelete(item.id_san_pham)} >
-                            <i className="fa-solid fa-trash"></i>
-                          </button>
-                          <button
-                            className="btn btn-primary btn-sm edit"
-                            title="Sửa"
-                            data-toggle="modal"
-                            button-delete
-                            data-id={item.id_san_pham}
-                            data-target="#ModalUP"
-                          >
-                            <a href={`/admin/EditProduct/${item.id_san_pham}`} >
-                             <i className="fas fa-edit"></i>
-                            </a>
-                           
-                          </button>
-                             <button
-                            className="btn btn-primary btn-sm edit"
-                            title="Chi Tiet San Pham"
-                            data-toggle="modal"
-                            button-delete
-                            data-id={item.id_san_pham}
-                            data-target="#ModalUP"
-                          >
-                            <a href={`/admin/ProductDetail/${item.id_san_pham}`} >
-                          <FaEye />
-                            </a>
-                           
-                          </button>
+              <table className="table table-hover table-bordered" id="sampleTable">
+  <thead>
+    <tr>
+      <th width="10">
+        <input
+          type="checkbox"
+          id="all"
+          checked={selectedDisCountManger.length === DisCountManger.length && DisCountManger.length > 0}
+          onChange={handleSelectAll}
+        />
+      </th>
+      <th>ID Giảm Giá</th>
+      <th>Mã Giảm Giá</th>
+      <th>Tên</th>
+      <th>Loại</th>
+      <th>Giá Trị</th>
+      <th>Điều Kiện</th>
+      <th>Ngày Bắt Đầu</th>
+      <th>Ngày Kết Thúc</th>
+      <th>Số Lượng</th>
+      <th>Số Lượng Còn Lại</th>
+      <th>Trạng Thái</th>
+      <th>Chức năng</th>
+    </tr>
+  </thead>
+  <tbody>
+    {DisCountManger.map((item) => (
+      <tr key={item.id_giam_gia}>
+        <td>
+          <input
+            type="checkbox"
+            name="check1"
+            value={item.id_giam_gia}
+            checked={selectedDisCountManger.includes(item.id_giam_gia)}
+            onChange={(e) => handleCheckboxChange(e, item.id_giam_gia)}
+          />
+        </td>
+        <td>{item.id_giam_gia}</td>
+        <td>{item.ma_giam_gia}</td>
+        <td>{item.ten}</td>
+        <td>{item.loai}</td>
+        <td>{item.gia_tri}</td>
+        <td>{item.dieu_kien}</td>
+     <td>{new Date(item.ngay_bat_dau).toLocaleString('vi-VN', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit'
+})}</td>
+     <td>{new Date(item.ngay_ket_thuc).toLocaleString('vi-VN', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit'
+})}</td>
+        <td>{item.so_luong}</td>
+        <td>{item.so_luong_con_lai}</td>
+        <td>
+          <span
+            className={`badge ${item.trang_thai === 'active' ? 'bg-success' : 'bg-secondary'}`}
+            onClick={() => hanldeStatus(item.id_giam_gia, item.trang_thai)}
+            style={{ cursor: 'pointer' }}
+          >
+            {item.trang_thai}
+          </span>
+        </td>
+     
+        <td className='button-action'>
+          <button className="btn btn-primary btn-sm trash" title="Xóa" onClick={() => hanldDelete(item.id_giam_gia)} >
+            <i className="fa-solid fa-trash"></i>
+          </button>
+          <button
+            className="btn btn-primary btn-sm edit"
+            title="Sửa"
+          >
+            <Link to={`/admin/EditDisCountManger/${item.id_giam_gia}`}>
+              <i className="fas fa-edit"></i>
+            </Link>
+          </button>
+          <button
+            className="btn btn-primary btn-sm edit"
+            title="Chi Tiết"
+          >
+            <Link to={`/admin/DisCountMangerDetail/${item.id_giam_gia}`}>
+              <FaEye />
+            </Link>
+          </button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
 
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
                 <div style={{ marginTop: '1rem' }}>
 
                 </div>
@@ -424,10 +412,12 @@ function ProductList() {
         </nav>
       </main>
 
-      {/* Modal chỉnh sửa sản phẩm */}
+      {/* Modal chỉnh sửa Khuyến Mãi */}
      
     </div>
+    </>
+   
   );
 }
 
-export default ProductList;
+export default DisCountMangerList;

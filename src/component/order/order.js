@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Clock from '../clock';
 import { FaEye } from 'react-icons/fa';
+import Clock from '../clock';
 
 function OrderList() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Hàm fetch đơn hàng từ server
+  const validStatuses = ['Đang xử lý', 'Xác nhận', 'Chờ thanh toán', 'Đã giao', 'Đã hủy'];
+
+  // Lấy danh sách đơn hàng
   const fetchOrders = async () => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('http://localhost:3000/admin/order'); // URL backend API lấy danh sách đơn hàng
+      const res = await fetch('http://localhost:3000/admin/order');
       if (!res.ok) throw new Error('Lỗi khi tải dữ liệu đơn hàng');
       const data = await res.json();
       setOrders(data);
@@ -28,25 +29,32 @@ function OrderList() {
     fetchOrders();
   }, []);
 
-  // Hàm cập nhật trạng thái đơn hàng
+  // Cập nhật trạng thái đơn hàng
   const handleStatusChange = async (id, newStatus) => {
+    if (!validStatuses.includes(newStatus)) {
+      alert('Trạng thái không hợp lệ');
+      return;
+    }
+
     try {
-      const res = await fetch(`http://localhost:3000/admin/order/${id}`, {
+      const res = await fetch(`http://localhost:3000/admin/order/orderStatus/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ trang_thai: newStatus }),
       });
+
       const data = await res.json();
       if (!data.success) {
         alert(data.message || 'Cập nhật trạng thái thất bại');
         return;
       }
-      // Cập nhật trạng thái trong state để UI thay đổi ngay
-      setOrders((prev) =>
-        prev.map((order) =>
+
+      setOrders(prev =>
+        prev.map(order =>
           order.id_don_hang === id ? { ...order, trang_thai: newStatus } : order
         )
       );
+
       alert('Cập nhật trạng thái thành công');
     } catch (err) {
       alert('Lỗi khi cập nhật trạng thái');
@@ -70,12 +78,11 @@ function OrderList() {
           <div className="col-md-12">
             <div className="tile">
               <div className="tile-body">
-
                 {loading && <p>Đang tải đơn hàng...</p>}
-                {error && <p style={{color: 'red'}}>{error}</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
 
                 {!loading && !error && (
-                  <table className="table table-hover table-bordered" id="orderTable">
+                  <table className="table table-hover table-bordered">
                     <thead>
                       <tr>
                         <th><input type="checkbox" /></th>
@@ -100,19 +107,24 @@ function OrderList() {
                             <td>
                               <select
                                 value={order.trang_thai}
-                                onChange={(e) => handleStatusChange(order.id_don_hang, e.target.value)}
+                                onChange={(e) =>
+                                  handleStatusChange(order.id_don_hang, e.target.value)
+                                }
                               >
-                                <option value="cho_duyet">Chờ duyệt</option>
-                                <option value="dang_xu_ly">Đang xử lý</option>
-                                <option value="hoan_thanh">Hoàn thành</option>
-                                <option value="huy">Hủy</option>
+                                {validStatuses.map(status => (
+                                  <option key={status} value={status}>{status}</option>
+                                ))}
                               </select>
                             </td>
                             <td>{order.tong_gia.toLocaleString()} VND</td>
                             <td>
-                              <Link to={`/admin/OrderDetail/${order.id_don_hang}`} className="btn btn-sm btn-info" title="Xem chi tiết">
+                              <a
+                                href={`/admin/OrderDetail/${order.id_don_hang}`}
+                                className="btn btn-sm btn-info"
+                                title="Xem chi tiết"
+                              >
                                 <FaEye />
-                              </Link>
+                              </a>
                             </td>
                           </tr>
                         ))
@@ -120,7 +132,6 @@ function OrderList() {
                     </tbody>
                   </table>
                 )}
-
               </div>
             </div>
           </div>

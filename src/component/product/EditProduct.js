@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import AppHeader from '../utils/header/header';
-import Sidebar from '../utils/sidebar/sidebar';
+
 import AdminLayOut from '../adminLayOut';
+import { Editor } from '@tinymce/tinymce-react';
 
 function EditProduct() {
   const { id } = useParams();
@@ -166,10 +166,35 @@ function EditProduct() {
   />
 </div>
 
-            <div className="form-group col-md-12">
+            {/* <div className="form-group col-md-12">
               <label>Mô tả sản phẩm</label>
               <textarea name="mo_ta" className="form-control" rows={4} value={product.mo_ta} onChange={handleChange} />
-            </div>
+            </div> */}
+
+<div className="form-group col-md-12">
+ <Editor
+           
+                apiKey="9kyol25jpp20dl4q5gszb4weywn41lgftl28za01bhkknycn" // Hoặc để trống nếu dùng local
+                value={product.mo_ta}
+               onEditorChange={(content) =>
+  setProduct((prev) => ({ ...prev, mo_ta: content }))
+}
+                init={{
+                  height: 300,
+                  menubar: false,
+                  plugins: [
+                    'advlist autolink lists link image charmap preview anchor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table paste code help wordcount'
+                  ],
+                  toolbar:
+                    'undo redo | formatselect | bold italic backcolor | ' +
+                    'alignleft aligncenter alignright alignjustify | ' +
+                    'bullist numlist outdent indent | removeformat | help'
+                }}
+              />
+</div>
+            
 
             <div className="form-group col-md-12">
               <button className="btn btn-save" type="submit">Lưu lại</button>

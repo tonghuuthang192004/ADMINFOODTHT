@@ -39,15 +39,43 @@ const [totalPages, setTotalPages] = useState(1);
       });
   }, [filters]);
 
-  const handleStatusChange = async (id, currentStatus) => {
-    try {
-      const res = await fetch(`http://localhost:3000/admin/user/change-status/${currentStatus}/${id}`, { method: 'PUT' });
-      const data = await res.json();
-      if (data.success) setFilters(prev => ({ ...prev }));
-    } catch (err) {
-      console.error('Lỗi đổi trạng thái:', err);
+   const hanldeStatus = async (id, statusCategory) => {
+  if (!statusCategory) {
+    console.error("Trạng thái không hợp lệ:", statusCategory);
+    Swal.fire("Lỗi", "Trạng thái người dùng không xác định.", "error");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/admin/user/change-status/${statusCategory}/${id}`,
+      { method: 'PUT' }
+    );
+    const data = await response.json();
+    if (data.success) {
+      Swal.fire({
+        title: 'Cập nhật trạng thái thành công!',
+        text: `Trạng thái đã được thay đổi.`,
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+      setFilters((prev) => ({ ...prev })); // Reload
     }
-  };
+  } catch (err) {
+    console.error('Lỗi khi đổi trạng thái:', err);
+  }
+};
+
+
+  // const handleStatusChange = async (id, currentStatus) => {
+  //   try {
+  //     const res = await fetch(`http://localhost:3000/admin/user/change-status/${currentStatus}/${id}`, { method: 'PUT' });
+  //     const data = await res.json();
+  //     if (data.success) setFilters(prev => ({ ...prev }));
+  //   } catch (err) {
+  //     console.error('Lỗi đổi trạng thái:', err);
+  //   }
+  // };
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -120,7 +148,12 @@ const [totalPages, setTotalPages] = useState(1);
         });
         const data = await res.json();
         if (data.success) {
-          setMessage(`Đã cập nhật trạng thái cho ${selectedUsers.length} người dùng`);
+         Swal.fire({
+        title: 'Cập nhật trạng thái thành công!',
+        text: `Trạng thái đã được thay đổi.`,
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
           setSelectedUsers([]);
           setFilters(prev => ({ ...prev }));
         }
@@ -250,7 +283,7 @@ const [totalPages, setTotalPages] = useState(1);
                     <td className="button_status">
   <span
     className={`badge ${user.trang_thai === 'active' ? 'bg-success' : 'bg-secondary'}`}
-    onClick={() => handleStatusChange(user.id_nguoi_dung, user.trang_thai)}
+    onClick={() => hanldeStatus(user.id_nguoi_dung, user.trang_thai)}
     style={{ cursor: 'pointer' }}
   >
     {user.trang_thai === 'active' ? 'Hoạt động' : 'Vô hiệu'}
@@ -274,53 +307,30 @@ const [totalPages, setTotalPages] = useState(1);
             </table>
 
             {/* Pagination */}
-            <nav>
-  <ul className="pagination">
-    <li className="page-item">
-      <button
-        className="page-link"
-        onClick={() =>
-          setFilters((prev) => ({
-            ...prev,
-            page: Math.max(1, prev.page - 1),
-          }))
-        }
-        disabled={filters.page === 1}
-      >
-        Trang trước
-      </button>
-    </li>
-
-    {[...Array(totalPages)].map((_, i) => (
-      <li
-        key={i + 1}
-        className={`page-item ${filters.page === i + 1 ? 'active' : ''}`}
-      >
-        <button
-          className="page-link"
-          onClick={() => setFilters((prev) => ({ ...prev, page: i + 1 }))}
-        >
-          {i + 1}
-        </button>
-      </li>
-    ))}
-
-    <li className="page-item">
-      <button
-        className="page-link"
-        onClick={() =>
-          setFilters((prev) => ({
-            ...prev,
-            page: Math.min(totalPages, prev.page + 1),
-          }))
-        }
-        disabled={filters.page === totalPages}
-      >
-        Kế tiếp
-      </button>
-    </li>
-  </ul>
-</nav>
+       <nav>
+          <ul className="pagination">
+            <li className="page-item">
+              <button
+                className="page-link"
+                onClick={() => setFilters((prev) => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
+              >
+                Trang trước
+              </button>
+            </li>
+            {[1, 2, 3].map((p) => (
+              <li key={p} className={`page-item ${filters.page === p ? 'active' : ''}`}>
+                <button className="page-link" onClick={() => setFilters((prev) => ({ ...prev, page: p }))}>
+                  {p}
+                </button>
+              </li>
+            ))}
+            <li className="page-item">
+              <button className="page-link" onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}>
+                Kế tiếp
+              </button>
+            </li>
+          </ul>
+        </nav>
 
           </div>
         </div>

@@ -15719,3 +15719,10 @@ text-align:center;
   display: flex;
   justify-content: space-between;
 }
+.Background {
+  background: linear-gradient(90deg, #D1330B, #FF6B6B);
+}
+
+.flex{
+  display: flex;
+}
