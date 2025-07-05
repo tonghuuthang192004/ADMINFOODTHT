@@ -1,12 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Clock from '../clock';
 import { LineChart, BarChart } from '../chart/chart';
-import {  FaUsers,FaShoppingCart,FaClipboardList,FaExclamationTriangle } from 'react-icons/fa';
+import { FaUsers, FaShoppingCart, FaClipboardList, FaStar  } from 'react-icons/fa';
+import { data } from 'react-router-dom';
 function IndexDashBoard() {
   const currentYear = new Date().getFullYear();
+  const [countOrder, setCountOrder] = useState(0);
+  const [countProduct, setCountProduct] = useState(0);
 
+  const [countUser, setCountUser] = useState(0);
+
+  const [countProductValutaion, setcountProductValutaion] = useState(0);
+
+useEffect(()=>{
+  const fetdataUser= async()=>{
+    const response=await fetch('http://localhost:3000/admin/dashboard/countUser');
+    const data=await response.json();
+    //console.log(data);
+    setCountUser(data)
+  }
+  fetdataUser()
+
+
+},[])
+useEffect(()=>{
+  const fetdataProduct= async()=>{
+    const response =await fetch('http://localhost:3000/admin/dashboard/countProduct');
+    const data =await response.json();
+    setCountProduct(data)
+
+  };
+  fetdataProduct()
+},[])
+
+useEffect(()=>{
+  const fetchDataOrder = async()=>{
+    const response =await fetch('http://localhost:3000/admin/dashboard/countOrder');
+    const data = await response.json();
+    setCountOrder(data)
+  }
+fetchDataOrder();
+},[])
+
+useEffect(()=>{
+  const fetchProductValutaion = async()=>{
+    const response =await fetch('http://localhost:3000/admin/dashboard/countproductEvaluation');
+    const data = await response.json();
+    setcountProductValutaion(data)
+  }
+fetchProductValutaion();
+},[])
   return (
-    <main className="app-content">
+    <main className="app-content" style={{ marginTop: 40 }}>
       <div className="row">
         <div className="col-md-12">
           <div className="app-title">
@@ -27,10 +72,14 @@ function IndexDashBoard() {
             {/* Widget 1 */}
             <div className="col-md-6">
               <div className="widget-small primary coloured-icon">
-                  <FaUsers className='Icon_react' /> 
+                <FaUsers className='Icon_react' />
                 <div className="info">
                   <h4>Tổng khách hàng</h4>
-                  <p><b>56 khách hàng</b></p>
+                  
+                  <p>
+                    Tổng số Người Dùng là:
+                    <b>{countUser}</b>
+                    </p>
                   <p className="info-tong">Tổng số khách hàng được quản lý.</p>
                 </div>
               </div>
@@ -38,11 +87,11 @@ function IndexDashBoard() {
             {/* Widget 2 */}
             <div className="col-md-6">
               <div className="widget-small info coloured-icon">
-                <FaShoppingCart className='Icon_react'/>
+                <FaShoppingCart className='Icon_react' />
 
                 <div className="info">
                   <h4>Tổng sản phẩm</h4>
-                  <p><b>1850 sản phẩm</b></p>
+                  <p><b>{countProduct} sản phẩm</b></p>
                   <p className="info-tong">Tổng số sản phẩm được quản lý.</p>
                 </div>
               </div>
@@ -50,10 +99,10 @@ function IndexDashBoard() {
             {/* Widget 3 */}
             <div className="col-md-6">
               <div className="widget-small warning coloured-icon">
-               <FaClipboardList className='Icon_react'/>
+                <FaClipboardList className='Icon_react' />
                 <div className="info">
                   <h4>Tổng đơn hàng</h4>
-                  <p><b>247 đơn hàng</b></p>
+                  <p><b>{countOrder} đơn hàng</b></p>
                   <p className="info-tong">Tổng số hóa đơn bán hàng trong tháng.</p>
                 </div>
               </div>
@@ -61,11 +110,11 @@ function IndexDashBoard() {
             {/* Widget 4 */}
             <div className="col-md-6">
               <div className="widget-small danger coloured-icon">
-              <FaExclamationTriangle className='Icon_react'/>
+                <FaStar  className='Icon_react' />
                 <div className="info">
-                  <h4>Sắp hết hàng</h4>
-                  <p><b>4 sản phẩm</b></p>
-                  <p className="info-tong">Số sản phẩm cảnh báo hết cần nhập thêm.</p>
+                  <h4>Đánh Giá</h4>
+                  <p><b>{countProductValutaion} Lượt Đánh Giá</b></p>
+                  <p className="info-tong">Tổng Số Lượt Đánh Giá Tốt Nhất trong Tháng.</p>
                 </div>
               </div>
             </div>

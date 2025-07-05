@@ -56,7 +56,7 @@ useEffect(() => {
             <p><strong>Số điện thoại:</strong> {user.so_dien_thoai}</p>
             <p><strong>Vai trò:</strong> {user.id_vai_tro === 1 ? 'Admin' : 'Người dùng'}</p>
             <p><strong>Trạng thái:</strong> {user.trang_thai === 'active' ? 'Hoạt động' : 'Vô hiệu'}</p>
-<p><strong>Ngày Chỉnh Sửa:</strong> {user.ngay_chinh_sua ? new Date(user.ngay_cap_nhat).toLocaleString() : 'Chưa cập nhật'}</p>
+          <p><strong>Ngày Chỉnh Sửa:</strong> {user.ngay_chinh_sua ? new Date(user.ngay_cap_nhat).toLocaleString() : 'Chưa cập nhật'}</p>
 
             <p><strong>Ngày tạo:</strong> {new Date(user.ngay_tao).toLocaleDateString()}</p>
 

@@ -15702,11 +15702,13 @@ text-align:center;
 .button_status:hover{
   cursor: pointer;
 }
-.selected_all{
-  display: flex;
-  justify-content: space-between;
-}
+.positon-status{
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 5px 12px;
 
+}
 .container-detail{
    max-width: 900px;
   margin: 40px auto;
@@ -15726,3 +15728,34 @@ text-align:center;
 .flex{
   display: flex;
 }
+.pagination{
+  display: flex;
+  align-items: center;
+  
+}
+.page-item{
+  margin: 2px;
+}
+
+.status-flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.selected_all{
+  border: 1px solid #fff;
+  align-items: center;
+  margin-top: 15px;
+  width: 100%;
+  height: auto;
+  
+}
+.selected_id{
+  margin-top: 15px;
+}
+.margin-right button{
+  margin-right: 10px;
+}
+/* .text-aligment{
+  text-align: center;
+} */

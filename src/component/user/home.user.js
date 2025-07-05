@@ -3,7 +3,7 @@ import Clock from '../clock';
 import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Swal from 'sweetalert2';
-import { FaEye } from 'react-icons/fa';
+import { NavLink } from 'react-router-dom';
 
 function UserList() {
   const [users, setUsers] = useState([]);
@@ -12,23 +12,23 @@ function UserList() {
   const [bulkAction, setBulkAction] = useState('active');
   const [message, setMessage] = useState('');
   const [filters, setFilters] = useState({ status: '', search: '', page: 1 });
-const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   // Load danh sách người dùng theo filter
   useEffect(() => {
     setLoading(true);
-      const params = new URLSearchParams();
-      
-  if (filters.search) params.append('search', filters.search);
-  if (filters.status) params.append('status', filters.status);
-  params.append('page', filters.page);
+    const params = new URLSearchParams();
+
+    if (filters.search) params.append('search', filters.search);
+    if (filters.status) params.append('status', filters.status);
+    params.append('page', filters.page);
 
 
     fetch(`http://localhost:3000/admin/user?${params.toString()}`)
       .then(res => res.json())
       .then(data => {
         setUsers(data);
-              setTotalPages(data.totalPages); // tổng số trang
+        setTotalPages(data.totalPages); // tổng số trang
 
         setSelectedUsers([]);
         setLoading(false);
@@ -39,32 +39,32 @@ const [totalPages, setTotalPages] = useState(1);
       });
   }, [filters]);
 
-   const hanldeStatus = async (id, statusCategory) => {
-  if (!statusCategory) {
-    console.error("Trạng thái không hợp lệ:", statusCategory);
-    Swal.fire("Lỗi", "Trạng thái người dùng không xác định.", "error");
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      `http://localhost:3000/admin/user/change-status/${statusCategory}/${id}`,
-      { method: 'PUT' }
-    );
-    const data = await response.json();
-    if (data.success) {
-      Swal.fire({
-        title: 'Cập nhật trạng thái thành công!',
-        text: `Trạng thái đã được thay đổi.`,
-        icon: 'success',
-        confirmButtonText: 'OK',
-      });
-      setFilters((prev) => ({ ...prev })); // Reload
+  const hanldeStatus = async (id, statusCategory) => {
+    if (!statusCategory) {
+      console.error("Trạng thái không hợp lệ:", statusCategory);
+      Swal.fire("Lỗi", "Trạng thái người dùng không xác định.", "error");
+      return;
     }
-  } catch (err) {
-    console.error('Lỗi khi đổi trạng thái:', err);
-  }
-};
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/admin/user/change-status/${statusCategory}/${id}`,
+        { method: 'PUT' }
+      );
+      const data = await response.json();
+      if (data.success) {
+        Swal.fire({
+          title: 'Cập nhật trạng thái thành công!',
+          text: `Trạng thái đã được thay đổi.`,
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+        setFilters((prev) => ({ ...prev })); // Reload
+      }
+    } catch (err) {
+      console.error('Lỗi khi đổi trạng thái:', err);
+    }
+  };
 
 
   // const handleStatusChange = async (id, currentStatus) => {
@@ -148,12 +148,12 @@ const [totalPages, setTotalPages] = useState(1);
         });
         const data = await res.json();
         if (data.success) {
-         Swal.fire({
-        title: 'Cập nhật trạng thái thành công!',
-        text: `Trạng thái đã được thay đổi.`,
-        icon: 'success',
-        confirmButtonText: 'OK',
-      });
+          Swal.fire({
+            title: 'Cập nhật trạng thái thành công!',
+            text: `Trạng thái đã được thay đổi.`,
+            icon: 'success',
+            confirmButtonText: 'OK',
+          });
           setSelectedUsers([]);
           setFilters(prev => ({ ...prev }));
         }
@@ -197,32 +197,64 @@ const [totalPages, setTotalPages] = useState(1);
 
         <div className="tile">
           <div className="tile-body">
-            <div className="row element-button">
+            <div className="row element-button positon-status ">
+                <NavLink className="btn btn-add btn-sm" to="/admin/CreateUser">
+                  <i className="fas fa-plus"></i> Tạo mới người dùng
+                </NavLink>
 
-              <div className="col-sm-4">
-    <form
-                        id="form-search"
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          const searchValue = e.target.keyword.value.trim();
-                          setFilters((prev) => ({ ...prev, search: searchValue, page: 1 }));
-                        }}
-                      >
-                        <div className="input-group">
-                          <input type="text" placeholder="nhập từ khóa" name="keyword" className="form-control" />
-                          <button className="btn btn-success btn-css" type="submit">
-                            Tìm
-                          </button>
-                        </div>
-                      </form>
-  </div>
+              <div className="col-sm-4 " >
+               
               
-              <div className="col-sm-2">
+                
+                  <form
+                    id="form-search"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const searchValue = e.target.keyword.value.trim();
+                      setFilters((prev) => ({ ...prev, search: searchValue, page: 1 }));
+                    }}
+                  >
+                    <div className="input-group">
+                      <input type="text" placeholder="nhập từ khóa" name="keyword" className="form-control" />
+                      <button className="btn btn-success btn-css" type="submit">
+                        Tìm
+                      </button>
+                    </div>
+                  </form>
+                
+
+              </div>
+
+              {/* <div className="col-sm-2">
                 <a className="btn btn-add btn-sm" href="/admin/CreateUser">
                   <i className="fas fa-plus"></i> Tạo mới người dùng
                 </a>
-              </div>
+              </div> */}
             </div>
+            <div className="col-sm-2 margin-right "   style={{display:'flex'}}>
+               <button 
+                        className={`btn btn-sm me-2 ${filters.status === '' ? 'btn-success' : 'btn-outline-success'}`}
+                        onClick={() => setFilters({ status: '', search: '', page: 1 })}
+                      >
+                        Tất Cả
+                      </button>
+
+                      <button
+                        className={`btn btn-sm me-2 ${filters.status === 'active' ? 'btn-success' : 'btn-outline-success'}`}
+                        onClick={() => setFilters((prev) => ({ ...prev, status: 'active', page: 1 }))}
+                      >
+                        Hoạt Động
+                      </button>
+
+                      <button
+                        className={`btn btn-sm ${filters.status === 'inactive' ? 'btn-success' : 'btn-outline-success'}`}
+                        onClick={() => setFilters((prev) => ({ ...prev, status: 'inactive', page: 1 }))}
+                      >
+                        Dừng Hoạt Động
+                      </button>
+              
+            </div>
+             
 
             <div style={{ marginBottom: '1rem' }} className="selected_all">
               <select
@@ -231,9 +263,9 @@ const [totalPages, setTotalPages] = useState(1);
                 className="form-control"
                 style={{ width: '150px', display: 'inline-block', marginRight: '10px' }}
               >
-                <option value="active">Kích hoạt</option>
-                <option value="inactive">Vô hiệu</option>
-                <option value="delete">Xóa</option>
+                <option value="active">active</option>
+                <option value="inactive">inactive</option>
+                <option value="delete">Deleted</option>
               </select>
               <button className="btn btn-primary" onClick={handleBulkAction}>Cập nhật</button>
               <p style={{ color: 'green', marginTop: '10px' }}>{message}</p>
@@ -281,14 +313,14 @@ const [totalPages, setTotalPages] = useState(1);
                     <td>{user.so_dien_thoai}</td>
                     <td>{new Date(user.ngay_tao).toLocaleDateString()}</td>
                     <td className="button_status">
-  <span
-    className={`badge ${user.trang_thai === 'active' ? 'bg-success' : 'bg-secondary'}`}
-    onClick={() => hanldeStatus(user.id_nguoi_dung, user.trang_thai)}
-    style={{ cursor: 'pointer' }}
-  >
-    {user.trang_thai === 'active' ? 'Hoạt động' : 'Vô hiệu'}
-  </span>
-</td>
+                      <span
+                        className={`badge ${user.trang_thai === 'active' ? 'bg-success' : 'bg-secondary'}`}
+                        onClick={() => hanldeStatus(user.id_nguoi_dung, user.trang_thai)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {user.trang_thai === 'active' ? 'Hoạt động' : 'Vô hiệu'}
+                      </span>
+                    </td>
                     <td className="button-action">
                       <button className="btn btn-danger btn-sm" onClick={() => handleDelete(user.id_nguoi_dung)}>
                         <i className="fas fa-trash"></i>
@@ -297,9 +329,9 @@ const [totalPages, setTotalPages] = useState(1);
                         <i className="fas fa-edit"></i>
                       </a>
 
-<a href={`/admin/UserDetail/${user.id_nguoi_dung}`} className="btn btn-info btn-sm">
-  <FaEye /></a>                      
-                      
+                      <a href={`/admin/UserDetail/${user.id_nguoi_dung}`} className="btn btn-info btn-sm">
+                        <i class="fa-solid fa-eye"></i>  </a>
+
                     </td>
                   </tr>
                 ))}
@@ -307,30 +339,30 @@ const [totalPages, setTotalPages] = useState(1);
             </table>
 
             {/* Pagination */}
-       <nav>
-          <ul className="pagination">
-            <li className="page-item">
-              <button
-                className="page-link"
-                onClick={() => setFilters((prev) => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
-              >
-                Trang trước
-              </button>
-            </li>
-            {[1, 2, 3].map((p) => (
-              <li key={p} className={`page-item ${filters.page === p ? 'active' : ''}`}>
-                <button className="page-link" onClick={() => setFilters((prev) => ({ ...prev, page: p }))}>
-                  {p}
-                </button>
-              </li>
-            ))}
-            <li className="page-item">
-              <button className="page-link" onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}>
-                Kế tiếp
-              </button>
-            </li>
-          </ul>
-        </nav>
+            <nav>
+              <ul className="pagination">
+                <li className="page-item">
+                  <button
+                    className="page-link"
+                    onClick={() => setFilters((prev) => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
+                  >
+                    Trang trước
+                  </button>
+                </li>
+                {[1, 2, 3].map((p) => (
+                  <li key={p} className={`page-item ${filters.page === p ? 'active' : ''}`}>
+                    <button className="page-link" onClick={() => setFilters((prev) => ({ ...prev, page: p }))}>
+                      {p}
+                    </button>
+                  </li>
+                ))}
+                <li className="page-item">
+                  <button className="page-link" onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}>
+                    Kế tiếp
+                  </button>
+                </li>
+              </ul>
+            </nav>
 
           </div>
         </div>

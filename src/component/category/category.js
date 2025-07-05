@@ -220,49 +220,6 @@ const handleBulkAction = async () => {
                     </a>
                   </div>
                 </div>
-{/* 
-                <div className="card mb-6">
-                  <div className="card-body">
-                    <div className="btn_active mb-3">
-                      <button
-                        className="btn btn-sm btn-outline-success me-2"
-                        onClick={() => setFilters({ status: '', search: '', page: 1 })}
-                      >
-                        Tất Cả
-                      </button>
-                      <button
-                        className="btn btn-sm btn-outline-success me-2"
-                        onClick={() => setFilters((prev) => ({ ...prev, status: 'active', page: 1 }))}
-                      >
-                        Hoạt Động
-                      </button>
-                      <button
-                        className="btn btn-sm btn-outline-success"
-                        onClick={() => setFilters((prev) => ({ ...prev, status: 'inactive', page: 1 }))}
-                      >
-                        Dừng Hoạt Động
-                      </button>
-                    </div>
-
-                    <div className="form-search mb-3">
-                      <form
-                        id="form-search"
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          const searchValue = e.target.keyword.value.trim();
-                          setFilters((prev) => ({ ...prev, search: searchValue, page: 1 }));
-                        }}
-                      >
-                        <div className="input-group">
-                          <input type="text" placeholder="nhập từ khóa" name="keyword" className="form-control" />
-                          <button className="btn btn-success btn-css" type="submit">
-                            Tìm
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div> */}
 
                 <div style={{ marginBottom: '1rem' }} className='selected_all'>
                   <div className='selected_category'>
@@ -282,13 +239,8 @@ const handleBulkAction = async () => {
                   </div>
 
                   <div className='selected_id'>
-                    <label>Danh sách ID danh mục được chọn:</label>
-                    <input
-                      type="text"
-                      readOnly
-                      value={selectedCategories.join(', ')}
-                      style={{ width: '100%', padding: '8px' }}
-                    />
+                    <label>Danh sách ID danh mục được chọn:{selectedCategories.join(', ')}</label>
+                  
                   </div>
 
                   <p style={{ color: 'green', marginTop: '10px' }}>{message}</p>
@@ -310,7 +262,9 @@ const handleBulkAction = async () => {
                       <th>Mã danh mục</th>
                       <th>Tên danh mục</th>
                       <th>hinh_anh</th>
+                      <th>Tiêu Đề</th>
                       <th>Ngày tạo</th>
+
                       <th>Ngày cập nhật</th>
                       <th>Tình trạng</th>
                       <th>Chức năng</th>
@@ -333,6 +287,7 @@ const handleBulkAction = async () => {
                         <td>
 <img src={item.hinh_anh?.startsWith('http') ? item.hinh_anh : `http://localhost:3000/uploads/${item.hinh_anh}`} alt={item.ten} width="100" />
                         </td>
+                        <td>{item.tieu_de}</td>
                         <td>
                           {item.ngay_tao}
                         </td>

@@ -51,7 +51,7 @@ if (response.ok && data) {
   const nameOrEmail = data.ho_ten || data.email || 'Người dùng';
     localStorage.setItem('user', JSON.stringify(data));
 
- navigate('/admin/DashBorad')
+ navigate('/admin/Dashoard')
 } else {
   alert(data.message || 'Đăng nhập thất bại');
 }

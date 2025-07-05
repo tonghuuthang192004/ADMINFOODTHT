@@ -43,7 +43,7 @@ function Sidebar() {
         </div>
         <hr />
         <ul className="app-menu">
-          <li>
+          {/* <li>
             <NavLink
               to="/phan-mem-ban-hang"
               className={({ isActive }) =>
@@ -53,17 +53,17 @@ function Sidebar() {
               <i className="app-menu__icon bx bx-cart-alt"></i>
               <span className="app-menu__label">POS Bán Hàng</span>
             </NavLink>
-          </li>
+          </li> */}
           <li>
             <NavLink
-              to="/"
+              to="/admin/Dashoard"
               className={({ isActive }) =>
                 'app-menu__item ' + (isActive ? 'active' : '')
               }
-              end
+              
             >
               <DiReact className='app-menu__icon' />
-              <span className="app-menu__label">Bảng điều khiển</span>
+              <span className="app-menu__label">Tổng Quan</span>
             </NavLink>
           </li>
           <li>
@@ -121,9 +121,20 @@ function Sidebar() {
               <span className="app-menu__label">Quản Lý Khuyến Mãi</span>
             </NavLink>
           </li>
+           <li>
+            <NavLink
+              to="/page-calendar"
+              className={({ isActive }) =>
+                'app-menu__item ' + (isActive ? 'active' : '')
+              }
+            >
+              <FaReact className='app-menu__icon' />
+              <span className="app-menu__label">Quản Lý Đánh GIÁ</span>
+            </NavLink>
+          </li>
           <li>
             <NavLink
-              to="/quan-ly-bao-cao"
+              to="/admin/DashboardReport"
               className={({ isActive }) =>
                 'app-menu__item ' + (isActive ? 'active' : '')
               }
@@ -132,18 +143,8 @@ function Sidebar() {
               <span className="app-menu__label">Báo cáo doanh thu</span>
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              to="/page-calendar"
-              className={({ isActive }) =>
-                'app-menu__item ' + (isActive ? 'active' : '')
-              }
-            >
-              <FaReact className='app-menu__icon' />
-              <span className="app-menu__label">Lịch công tác</span>
-            </NavLink>
-          </li>
-          <li>
+         
+          {/* <li>
             <NavLink
               to="#"
               className={({ isActive }) =>
@@ -153,7 +154,7 @@ function Sidebar() {
               <DiReact className='app-menu__icon' />
               <span className="app-menu__label">Cài đặt hệ thống</span>
             </NavLink>
-          </li>
+          </li> */}
         </ul>
       </aside>
         

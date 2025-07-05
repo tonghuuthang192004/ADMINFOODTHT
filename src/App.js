@@ -19,6 +19,7 @@ import EditUser from './component/user/eidtUser';
 import DisCountMangerList from './component/discountManger/discountManger';
 import AddDisCountManger from './component/discountManger/creatDisCountManger';
 import EditDisCountManger from './component/discountManger/EditDisCountManger';
+import DashboardReport from './component/report/DashboardReport';
 const adminPath = '/admin';
 
 function App() {
@@ -31,7 +32,8 @@ function App() {
 
     {/* Admin routes */}
     
-    <Route path={`${adminPath}/DashBorad`} element={<DashBorad />} />
+    <Route path={`${adminPath}/Dashoard`} element={<DashBorad />} />
+
     <Route path={`${adminPath}/Product`} element={<Product />} />
     <Route path={`${adminPath}/AddProduct`} element={<AddProduct />} />
 
@@ -58,6 +60,8 @@ function App() {
     <Route path={`${adminPath}/Discountmanger`}element={<DisCountMangerList/>}/>
     <Route path={`${adminPath}/AddDisCountManger`} element ={<AddDisCountManger/>}/>
     <Route path={`${adminPath}/EditDisCountManger/:id_giam_gia`} element ={<EditDisCountManger/>}/>
+
+    <Route path={`${adminPath}/DashboardReport`} element={<DashboardReport/>}/>
 
 
 </Routes>

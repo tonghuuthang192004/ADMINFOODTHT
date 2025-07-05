@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Clock from '../clock';
-import { Link } from 'react-router-dom';
+import {  NavLink } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { getProducts } from '../../api/api';
 import Swal from 'sweetalert2';
 
-import {FaEye } from 'react-icons/fa'
+import { FaEye } from 'react-icons/fa'
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -73,67 +73,66 @@ function ProductList() {
 
   // Cập nhật trạng thái hàng loạt và xóa
   const handleBulkAction = async () => {
-  if (selectedProducts.length === 0) {
-    setMessage('Vui lòng chọn ít nhất 1 sản phẩm');
-    return;
-  }
-
-  if (bulkSAction === 'delete') {
-   const result = await Swal.fire({
-    title: 'Bạn có chắc chắn?',
-    text: 'Sản phẩm sẽ được đưa vào thùng rác!',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Xóa',
-    cancelButtonText: 'Hủy bỏ',
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-  });
-  if(result.isConfirmed)
-  {
-  try {
-      const res = await fetch('http://localhost:3000/admin/products/delete-multiple', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids: selectedProducts }),
-      });
-      const data = await res.json();
-      if (data.success) {
-      Swal.fire('Đã xóa!', `Đã xóa ${selectedProducts.length} sản phẩm.`, 'success');
-        setSelectedProducts([]);
-        setFilters((prev) => ({ ...prev }));
-      } else {
-      Swal.fire('Lỗi!', data.error || 'Xóa thất bại.', 'error');
-      }
-    } catch (error) {
-      console.error(error);
-    Swal.fire('Lỗi!', 'Lỗi khi xóa sản phẩm hàng loạt.', 'error');
-
+    if (selectedProducts.length === 0) {
+      setMessage('Vui lòng chọn ít nhất 1 sản phẩm');
+      return;
     }
-  }
 
-    
-  } else {
-    try {
-      const res = await fetch('http://localhost:3000/admin/products/change-multi', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids: selectedProducts, status: bulkSAction }),
+    if (bulkSAction === 'delete') {
+      const result = await Swal.fire({
+        title: 'Bạn có chắc chắn?',
+        text: 'Sản phẩm sẽ được đưa vào thùng rác!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy bỏ',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
       });
-      const data = await res.json();
-      if (data.success) {
-        setMessage(`Đã cập nhật trạng thái cho ${selectedProducts.length} sản phẩm`);
-        setSelectedProducts([]);
-        setFilters((prev) => ({ ...prev }));
-      } else {
-        setMessage(data.error || 'Cập nhật thất bại');
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch('http://localhost:3000/admin/products/delete-multiple', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ids: selectedProducts }),
+          });
+          const data = await res.json();
+          if (data.success) {
+            Swal.fire('Đã xóa!', `Đã xóa ${selectedProducts.length} sản phẩm.`, 'success');
+            setSelectedProducts([]);
+            setFilters((prev) => ({ ...prev }));
+          } else {
+            Swal.fire('Lỗi!', data.error || 'Xóa thất bại.', 'error');
+          }
+        } catch (error) {
+          console.error(error);
+          Swal.fire('Lỗi!', 'Lỗi khi xóa sản phẩm hàng loạt.', 'error');
+
+        }
       }
-    } catch (error) {
-      console.error(error);
-      setMessage('Lỗi khi cập nhật trạng thái hàng loạt');
+
+
+    } else {
+      try {
+        const res = await fetch('http://localhost:3000/admin/products/change-multi', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ids: selectedProducts, status: bulkSAction }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          setMessage(`Đã cập nhật trạng thái cho ${selectedProducts.length} sản phẩm`);
+          setSelectedProducts([]);
+          setFilters((prev) => ({ ...prev }));
+        } else {
+          setMessage(data.error || 'Cập nhật thất bại');
+        }
+      } catch (error) {
+        console.error(error);
+        setMessage('Lỗi khi cập nhật trạng thái hàng loạt');
+      }
     }
-  }
-};
+  };
 
 
 
@@ -168,37 +167,37 @@ function ProductList() {
   // xóa mềm 
 
 
-  const hanldDelete = async(id)=>{
-  const result = await Swal.fire({
-    title: 'Bạn có chắc chắn?',
-    text: 'Sản phẩm sẽ được đưa vào thùng rác!',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Xóa',
-    cancelButtonText: 'Hủy bỏ',
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-  });
+  const hanldDelete = async (id) => {
+    const result = await Swal.fire({
+      title: 'Bạn có chắc chắn?',
+      text: 'Sản phẩm sẽ được đưa vào thùng rác!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy bỏ',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+    });
     if (result.isConfirmed) {
-    try {
-      const res = await fetch(`http://localhost:3000/admin/products/deleted/${id}`, {
-        method: 'DELETE',
-      });
+      try {
+        const res = await fetch(`http://localhost:3000/admin/products/deleted/${id}`, {
+          method: 'DELETE',
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (data.success) {
-        Swal.fire('Đã xóa!', 'Mã Khuyến Mãi đã bị xóa.', 'success');
-        setFilters(prev => ({ ...prev })); // reload lại danh sách
-      } else {
-        Swal.fire('Lỗi!', data.message || 'Không thể xóa sản phẩm.', 'error');
+        if (data.success) {
+          Swal.fire('Đã xóa!', 'Mã Khuyến Mãi đã bị xóa.', 'success');
+          setFilters(prev => ({ ...prev })); // reload lại danh sách
+        } else {
+          Swal.fire('Lỗi!', data.message || 'Không thể xóa sản phẩm.', 'error');
+        }
+      } catch (error) {
+        console.error(error);
+        Swal.fire('Lỗi!', 'Đã xảy ra lỗi khi xóa sản phẩm.', 'error');
       }
-    } catch (error) {
-      console.error(error);
-      Swal.fire('Lỗi!', 'Đã xảy ra lỗi khi xóa sản phẩm.', 'error');
     }
-  }
-};
+  };
 
   return (
     <div className="app sidebar-mini rtl">
@@ -207,7 +206,7 @@ function ProductList() {
           <ul className="app-breadcrumb breadcrumb side">
             <li className="breadcrumb-item active">
               <a href="#">
-                <b>Danh sách Khuyến Mãi</b>
+                <b>Danh sách Sản Phẩm</b>
               </a>
             </li>
           </ul>
@@ -223,37 +222,37 @@ function ProductList() {
                 <div className="row element-button">
                   <div className="col-sm-2">
                     <a className="btn btn-add btn-sm" href="/admin/AddProduct" title="Thêm">
-                      <i className="fas fa-plus"></i> Mã Khuyến Mãi Đã bị Xóa
+                      <i className="fas fa-plus"></i> Tạo Mới Sản Phẩm
                     </a>
                   </div>
                 </div>
 
                 <div className="card mb-6">
-                  <div className="card-body">
+                  <div className="card-body status-flex">
                     <div className="btn_active mb-3">
-                   <button
-    className={`btn btn-sm me-2 ${filters.status === '' ? 'btn-success' : 'btn-outline-success'}`}
-    onClick={() => setFilters({ status: '', search: '', page: 1 })}
-  >
-    Tất Cả
-  </button>
+                      <button
+                        className={`btn btn-sm me-2 ${filters.status === '' ? 'btn-success' : 'btn-outline-success'}`}
+                        onClick={() => setFilters({ status: '', search: '', page: 1 })}
+                      >
+                        Tất Cả
+                      </button>
 
-  <button
-    className={`btn btn-sm me-2 ${filters.status === 'active' ? 'btn-success' : 'btn-outline-success'}`}
-    onClick={() => setFilters((prev) => ({ ...prev, status: 'active', page: 1 }))}
-  >
-    Hoạt Động
-  </button>
+                      <button
+                        className={`btn btn-sm me-2 ${filters.status === 'active' ? 'btn-success' : 'btn-outline-success'}`}
+                        onClick={() => setFilters((prev) => ({ ...prev, status: 'active', page: 1 }))}
+                      >
+                        Hoạt Động
+                      </button>
 
-  <button
-    className={`btn btn-sm ${filters.status === 'inactive' ? 'btn-success' : 'btn-outline-success'}`}
-    onClick={() => setFilters((prev) => ({ ...prev, status: 'inactive', page: 1 }))}
-  >
-    Dừng Hoạt Động
-  </button>
-                    </div> 
+                      <button
+                        className={`btn btn-sm ${filters.status === 'inactive' ? 'btn-success' : 'btn-outline-success'}`}
+                        onClick={() => setFilters((prev) => ({ ...prev, status: 'inactive', page: 1 }))}
+                      >
+                        Dừng Hoạt Động
+                      </button>
+                    </div>
 
-                    <div className="form-search mb-3">
+                    <div className="form-search mb-3 container-status">
                       <form
                         id="form-search"
                         onSubmit={(e) => {
@@ -275,32 +274,34 @@ function ProductList() {
 
                 <div style={{ marginBottom: '1rem' }} className='selected_all'>
                   <div className='selected_product'>
-              <select
-                    value={bulkSAction}
-                    onChange={(e) => setbulkSAction(e.target.value)}
-                    className="form-control"
-                    style={{ width: '150px', display: 'inline-block', marginRight: '10px' }}
-                  >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="delete">Xóa tất cả</option>
-                  </select>
-                  <button className="btn btn-primary" onClick={handleBulkAction}>
-                    Cập nhật 
-                  </button>
+                    <select
+                      value={bulkSAction}
+                      onChange={(e) => setbulkSAction(e.target.value)}
+                      className="form-control"
+                      style={{ width: '150px', display: 'inline-block', marginRight: '10px' }}
+                    >
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                      <option value="delete">Xóa tất cả</option>
+                    </select>
+                    <button className="btn btn-primary" onClick={handleBulkAction}>
+                      Cập nhật
+                    </button>
 
                   </div>
-                
+
                   <div className='selected_id'>
-  <label>Danh sách ID sản phẩm được chọn:</label>
-                  <input
-                    type="text"
-                    readOnly
-                    value={selectedProducts.join(', ')}
-                    style={{ width: '100%', padding: '8px' }}
-                  />
+                    
+                    <label>Danh sách ID sản phẩm được chọn:
+                      <strong>
+                                              {selectedProducts.join(', ')} 
+
+                      </strong>
+
+                      </label>
+                 
                   </div>
-                
+
                   <p style={{ color: 'green', marginTop: '10px' }}>{message}</p>
 
                 </div>
@@ -341,8 +342,8 @@ function ProductList() {
                         <td>{item.id_san_pham}</td>
                         <td>{item.ten}</td>
                         <td>
-<img src={item.hinh_anh?.startsWith('http') ? item.hinh_anh : `http://localhost:3000/uploads/${item.hinh_anh}`} alt={item.ten} width="100" />
-                 </td>
+                          <img src={item.hinh_anh?.startsWith('http') ? item.hinh_anh : `http://localhost:3000/uploads/${item.hinh_anh}`} alt={item.ten} width="100" />
+                        </td>
                         <td className="button_status">
                           <span
                             className={`badge ${item.trang_thai === 'active' ? 'bg-success' : 'bg-secondary'}`}
@@ -366,12 +367,12 @@ function ProductList() {
                             data-id={item.id_san_pham}
                             data-target="#ModalUP"
                           >
-                            <a href={`/admin/EditProduct/${item.id_san_pham}`} >
-                             <i className="fas fa-edit"></i>
-                            </a>
-                           
+                            <NavLink to={`/admin/EditProduct/${item.id_san_pham}`} >
+                              <i className="fas fa-edit"></i>
+                            </NavLink>
+
                           </button>
-                             <button
+                          <button
                             className="btn btn-primary btn-sm edit"
                             title="Chi Tiet San Pham"
                             data-toggle="modal"
@@ -379,10 +380,10 @@ function ProductList() {
                             data-id={item.id_san_pham}
                             data-target="#ModalUP"
                           >
-                            <a href={`/admin/ProductDetail/${item.id_san_pham}`} >
-                          <FaEye />
-                            </a>
-                           
+                            <NavLink to={`/admin/ProductDetail/${item.id_san_pham}`} >
+                              <FaEye />
+                            </NavLink>
+
                           </button>
 
                         </td>
@@ -425,7 +426,7 @@ function ProductList() {
       </main>
 
       {/* Modal chỉnh sửa sản phẩm */}
-     
+
     </div>
   );
 }

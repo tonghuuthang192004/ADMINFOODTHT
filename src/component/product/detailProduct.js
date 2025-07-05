@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link,NavLink } from 'react-router-dom';
 import AppHeader from '../utils/header/header';
 
 import Sidebar from '../utils/sidebar/sidebar';
@@ -31,7 +31,7 @@ function ProductDetail() {
   <AdminLayOut/>
 
         <div className="container mt-4 container-detail">
-      <a href="/admin/Product" className="btn btn-secondary mb-3">← Quay lại danh sách</a>
+      <NavLink  to="/admin/Product" className="btn btn-secondary mb-3">← Quay lại danh sách</NavLink>
       <h2>Chi tiết sản phẩm #{product.id_san_pham}</h2>
       <div className="row">
         <div className="col-md-4">
@@ -62,9 +62,9 @@ function ProductDetail() {
                             data-id=""
                             data-target="#ModalUP"
                           >
-                            <a to="/admin/EditProduct" >
-                             <i className="fas fa-edit"></i>
-                            </a>
+                              <NavLink to={`/admin/EditProduct/${product.id_san_pham}`} >
+                              <i className="fas fa-edit"></i>
+                            </NavLink>
                            
                           </button>
         </div>
