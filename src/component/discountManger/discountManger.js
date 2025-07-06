@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Clock from '../clock';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import Swal from 'sweetalert2';
@@ -270,13 +270,13 @@ function DisCountMangerList() {
                   </div>
                 
                   <div className='selected_id'>
-  <label>Danh sách ID Khuyến Mãi được chọn:</label>
-                  <input
+  <label>Danh sách ID Khuyến Mãi được chọn: {selectedDisCountManger.join(', ')}</label>
+                  {/* <input
                     type="text"
                     readOnly
-                    value={selectedDisCountManger.join(', ')}
+                    value=
                     style={{ width: '100%', padding: '8px' }}
-                  />
+                  /> */}
                   </div>
                 
                   <p style={{ color: 'green', marginTop: '10px' }}>{message}</p>
@@ -352,7 +352,7 @@ function DisCountMangerList() {
           </span>
         </td>
      
-        <td className='button-action'>
+        <td className='button-action margin-right'>
           <button className="btn btn-primary btn-sm trash" title="Xóa" onClick={() => hanldDelete(item.id_giam_gia)} >
             <i className="fa-solid fa-trash"></i>
           </button>
@@ -360,17 +360,17 @@ function DisCountMangerList() {
             className="btn btn-primary btn-sm edit"
             title="Sửa"
           >
-            <Link to={`/admin/EditDisCountManger/${item.id_giam_gia}`}>
+            <NavLink to={`/admin/EditDisCountManger/${item.id_giam_gia}`}>
               <i className="fas fa-edit"></i>
-            </Link>
+            </NavLink>
           </button>
           <button
             className="btn btn-primary btn-sm edit"
             title="Chi Tiết"
           >
-            <Link to={`/admin/DisCountMangerDetail/${item.id_giam_gia}`}>
+            <NavLink to={`/admin/DisCountMangerDetail/${item.id_giam_gia}`}>
               <FaEye />
-            </Link>
+            </NavLink>
           </button>
         </td>
       </tr>

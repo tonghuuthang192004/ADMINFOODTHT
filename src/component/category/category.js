@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Clock from '../clock';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { getCategory } from '../../api/api';  // Chuyển từ getProducts thành getCategories
 import Swal from 'sweetalert2';
@@ -178,7 +178,8 @@ const handleBulkAction = async () => {
 
         const data = await res.json();
 
-        if (data.success) {
+        if (!data.success) {
+          
           Swal.fire('Đã xóa!', 'Danh mục đã bị xóa.', 'success');
           setFilters((prev) => ({ ...prev })); // reload lại danh sách
         } else {
@@ -215,9 +216,9 @@ const handleBulkAction = async () => {
               <div className="tile-body">
                 <div className="row element-button">
                   <div className="col-sm-2">
-                    <a className="btn btn-add btn-sm" href="/admin/AddCategory" title="Thêm">
+                    < NavLink className="btn btn-add btn-sm" to="/admin/CreateCategory" title="Thêm">
                       <i className="fas fa-plus"></i> Tạo mới Danh Mục
-                    </a>
+                    </NavLink>
                   </div>
                 </div>
 
@@ -315,9 +316,9 @@ const handleBulkAction = async () => {
                             data-toggle="modal"
                             data-target="#ModalUP"
                           >
-                            <a href={`/admin/EditCategory/${item.id_danh_muc}`} >
+                            <NavLink to={`/admin/EditCategory/${item.id_danh_muc}`} >
                              <i className="fas fa-edit"></i>
-                            </a>
+                            </NavLink>
                           </button>
                           <button
                             className="btn btn-primary btn-sm edit"
@@ -325,9 +326,9 @@ const handleBulkAction = async () => {
                             data-toggle="modal"
                             data-target="#ModalUP"
                           >
-                            <a href={`/admin/CategoryDetail/${item.id_danh_muc}`} >
+                            <NavLink to={`/admin/CategoryDetail/${item.id_danh_muc}`} >
                               <FaEye />
-                            </a>
+                            </NavLink>
                           </button>
                         </td>
                       </tr>

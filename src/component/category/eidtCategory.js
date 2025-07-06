@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import AdminLayOut from '../adminLayOut';
-import { Navigate } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-const CreateCategory = () => {
+import { useNavigate, useParams } from 'react-router-dom';
+
+const EditCategory = () => {
   const [formData, setFormData] = useState({
     ten: '',
     tieu_de: '',
@@ -12,9 +12,39 @@ const CreateCategory = () => {
     deleted: 0,
   });
   const navigate = useNavigate();
+  const { id_danh_muc } = useParams();
 
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+
+  // Tải dữ liệu danh mục hiện tại
+  useEffect(() => {
+      console.log('ID danh mục cần sửa:', id_danh_muc); // 👈 kiểm tra ID
+
+    const fetchCategory = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/admin/category/edit-Category/${id_danh_muc}`);
+        const data = response.data;
+        setFormData({
+          ten: data.ten,
+          tieu_de: data.tieu_de,
+          trang_thai: data.trang_thai,
+          deleted: data.deleted,
+        });
+        if (data.hinh_anh) {
+  if (data.hinh_anh.startsWith('http')) {
+    setPreview(data.hinh_anh);
+  } else {
+    setPreview(`http://localhost:3000/uploads/${data.hinh_anh}`);
+  }
+}
+      } catch (error) {
+        Swal.fire('Lỗi', 'Không thể tải dữ liệu danh mục', 'error');
+      }
+    };
+
+    fetchCategory();
+  }, [id_danh_muc]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,8 +66,7 @@ const CreateCategory = () => {
     formDataToSend.append('ten', formData.ten);
     formDataToSend.append('tieu_de', formData.tieu_de);
     formDataToSend.append('trang_thai', formData.trang_thai);
-    formDataToSend.append('deleted', 0);
-    formDataToSend.append('ngay_tao', now);
+    formDataToSend.append('deleted', formData.deleted);
     formDataToSend.append('ngay_cap_nhat', now);
 
     if (image) {
@@ -45,20 +74,11 @@ const CreateCategory = () => {
     }
 
     try {
-      await axios.post('http://localhost:3000/admin/category/create-Category', formDataToSend);
-      Swal.fire('Thành công', 'Thêm danh mục thành công!', 'success');
-       navigate('/admin/Category');
-      // Reset form
-      setFormData({
-        ten: '',
-        tieu_de: '',
-        trang_thai: 'active',
-        deleted: 0,
-      });
-      setImage(null);
-      setPreview(null);
+      await axios.post(`http://localhost:3000/admin/category/edit-Category/${id_danh_muc}`, formDataToSend);
+      Swal.fire('Thành công', 'Cập nhật danh mục thành công!', 'success');
+      navigate('/admin/Category');
     } catch (err) {
-      Swal.fire('Lỗi', err.response?.data?.message || 'Không thể thêm danh mục', 'error');
+      Swal.fire('Lỗi', err.response?.data?.message || 'Không thể cập nhật danh mục', 'error');
     }
   };
 
@@ -70,12 +90,12 @@ const CreateCategory = () => {
           <ul className="app-breadcrumb breadcrumb">
             <li className="breadcrumb-item">Danh sách danh mục</li>
             <li className="breadcrumb-item">
-              <a href="#">Thêm danh mục</a>
+              <a href="#">Chỉnh sửa danh mục</a>
             </li>
           </ul>
         </div>
         <div className="tile">
-          <h3 className="tile-title">Tạo mới danh mục</h3>
+          <h3 className="tile-title">Chỉnh sửa danh mục</h3>
           <form onSubmit={handleSubmit} encType="multipart/form-data" autoComplete="off">
             <div className="form-group">
               <label>Tên danh mục</label>
@@ -122,7 +142,7 @@ const CreateCategory = () => {
                 <option value="inactive">Vô hiệu</option>
               </select>
             </div>
-            <button type="submit" className="btn btn-primary">Thêm danh mục</button>
+            <button type="submit" className="btn btn-primary">Cập nhật danh mục</button>
           </form>
         </div>
       </main>
@@ -130,4 +150,4 @@ const CreateCategory = () => {
   );
 };
 
-export default CreateCategory;
+export default EditCategory;

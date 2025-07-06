@@ -43,17 +43,17 @@ function Sidebar() {
         </div>
         <hr />
         <ul className="app-menu">
-          {/* <li>
-            <NavLink
-              to="/phan-mem-ban-hang"
-              className={({ isActive }) =>
-                'app-menu__item ' + (isActive ? 'active' : '')
-              }
-            >
-              <i className="app-menu__icon bx bx-cart-alt"></i>
-              <span className="app-menu__label">POS Bán Hàng</span>
-            </NavLink>
-          </li> */}
+         {/* <li>
+  <NavLink
+    to="/admin/AI"
+    className={({ isActive }) =>
+      'app-menu__item ' + (isActive ? 'active' : '')
+    }
+  >
+    <FaReact className='app-menu__icon' />
+    <span className="app-menu__label">Trợ lý AI</span>
+  </NavLink>
+</li> */}
           <li>
             <NavLink
               to="/admin/Dashoard"

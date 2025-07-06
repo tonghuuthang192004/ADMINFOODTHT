@@ -20,6 +20,9 @@ import DisCountMangerList from './component/discountManger/discountManger';
 import AddDisCountManger from './component/discountManger/creatDisCountManger';
 import EditDisCountManger from './component/discountManger/EditDisCountManger';
 import DashboardReport from './component/report/DashboardReport';
+import CreateCategory from './component/category/createCategory';
+import EditCategory from './component/category/eidtCategory';
+import AIPage from './component/AI/AI';
 const adminPath = '/admin';
 
 function App() {
@@ -48,6 +51,11 @@ function App() {
 
 
     <Route path={`${adminPath}/Category`} element={<IndexCategory/>}/>
+    <Route path={`${adminPath}/CreateCategory`} element={<CreateCategory/>}/>
+    <Route path={`${adminPath}/EditCategory/:id_danh_muc`} element={<EditCategory/>}/>
+
+    <Route path={`${adminPath}/AI`} element={<AIPage/>}/>
+
 
     
     <Route path={`${adminPath}/IndexUser`} element={<IndexUser/>}/>
