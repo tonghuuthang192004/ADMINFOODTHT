@@ -210,6 +210,7 @@ function UserList() {
                     id="form-search"
                     onSubmit={(e) => {
                       e.preventDefault();
+                      
                       const searchValue = e.target.keyword.value.trim();
                       setFilters((prev) => ({ ...prev, search: searchValue, page: 1 }));
                     }}

@@ -206,7 +206,7 @@ function DisCountMangerList() {
 
                 <div className="card mb-6">
                   <div className="card-body">
-             <div className="btn_active mb-3">
+             <div className="btn_active mb-3 margin-right">
   <button
     className={`btn btn-sm me-2 ${filters.status === '' ? 'btn-success' : 'btn-outline-success'}`}
     onClick={() => setFilters({ status: '', search: '', page: 1 })}
@@ -299,7 +299,7 @@ function DisCountMangerList() {
       <th>Tên</th>
       <th>Loại</th>
       <th>Giá Trị</th>
-      <th>Điều Kiện</th>
+      {/* <th>Điều Kiện</th> */}
       <th>Ngày Bắt Đầu</th>
       <th>Ngày Kết Thúc</th>
       <th>Số Lượng</th>
@@ -325,7 +325,7 @@ function DisCountMangerList() {
         <td>{item.ten}</td>
         <td>{item.loai}</td>
         <td>{item.gia_tri}</td>
-        <td>{item.dieu_kien}</td>
+        {/* <td>{item.dieu_kien}</td> */}
      <td>{new Date(item.ngay_bat_dau).toLocaleString('vi-VN', {
   year: 'numeric',
   month: '2-digit',

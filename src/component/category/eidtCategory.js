@@ -10,6 +10,8 @@ const EditCategory = () => {
     tieu_de: '',
     trang_thai: 'active',
     deleted: 0,
+    ngay_tao: '', 
+
   });
   const navigate = useNavigate();
   const { id_danh_muc } = useParams();
@@ -30,6 +32,8 @@ const EditCategory = () => {
           tieu_de: data.tieu_de,
           trang_thai: data.trang_thai,
           deleted: data.deleted,
+            ngay_tao: data.ngay_tao, // 👈 thêm dòng này
+
         });
         if (data.hinh_anh) {
   if (data.hinh_anh.startsWith('http')) {
@@ -68,6 +72,8 @@ const EditCategory = () => {
     formDataToSend.append('trang_thai', formData.trang_thai);
     formDataToSend.append('deleted', formData.deleted);
     formDataToSend.append('ngay_cap_nhat', now);
+    formDataToSend.append('ngay_tao', formData.ngay_tao); // 👈 thêm dòng này
+
 
     if (image) {
       formDataToSend.append('hinh_anh', image);

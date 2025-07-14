@@ -23,6 +23,8 @@ import DashboardReport from './component/report/DashboardReport';
 import CreateCategory from './component/category/createCategory';
 import EditCategory from './component/category/eidtCategory';
 import AIPage from './component/AI/AI';
+import DisCountMangerDetail from './component/discountManger/detailDiscountManger';
+import ReviewList from './component/Review/Review';
 const adminPath = '/admin';
 
 function App() {
@@ -68,10 +70,13 @@ function App() {
     <Route path={`${adminPath}/Discountmanger`}element={<DisCountMangerList/>}/>
     <Route path={`${adminPath}/AddDisCountManger`} element ={<AddDisCountManger/>}/>
     <Route path={`${adminPath}/EditDisCountManger/:id_giam_gia`} element ={<EditDisCountManger/>}/>
+    <Route path={`${adminPath}/DisCountMangerDetail/:id_giam_gia`} element ={<DisCountMangerDetail/>}/>
 
     <Route path={`${adminPath}/DashboardReport`} element={<DashboardReport/>}/>
 
+    <Route path={`${adminPath}/ReviewList`} element={<ReviewList/>}/>
 
+    
 </Routes>
 
         

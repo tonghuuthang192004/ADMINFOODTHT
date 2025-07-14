@@ -28,12 +28,24 @@ function Sidebar() {
       <aside className="app-sidebar"   style={{ background: 'linear-gradient(90deg, #D1330B, #FF6B6B)', minHeight: '100vh' }}
 >
         <div className="app-sidebar__user">
-          <img
+          {/* <img
             className="app-sidebar__user-avatar"
             src={user?.avatar || avatar}
             width="50px"
             alt="User Image"
-          />
+          /> */}
+          <img
+  width="50px"
+  className="app-sidebar__user-avatar"
+  src={user?.avatar?.startsWith('http') ? user.avatar : `http://localhost:3000/uploads/${user?.avatar}`}
+  alt={user?.avatar ? 'User Avatar' : 'Default Avatar'} 
+/>
+{/* 
+     <img   width="50px"
+          className="app-sidebar__user-avatar"src={user.avatar?.startsWith('http') ? user.avatar : `http://localhost:3000/uploads/${user.avatar}`} 
+            alt={user?.avatar ? 'User Avatar' : 'Default Avatar'} 
+  /> */}
+
           <div>
             <p className="app-sidebar__user-name">
               <b>{user?.ten || 'User'}</b>
@@ -123,7 +135,7 @@ function Sidebar() {
           </li>
            <li>
             <NavLink
-              to="/page-calendar"
+              to="/admin/ReviewList"
               className={({ isActive }) =>
                 'app-menu__item ' + (isActive ? 'active' : '')
               }

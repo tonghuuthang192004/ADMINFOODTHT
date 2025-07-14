@@ -5,7 +5,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { getProducts } from '../../api/api';
 import Swal from 'sweetalert2';
 
-import { FaEye } from 'react-icons/fa'
+
+import { FaEye,FaArrowLeft,FaArrowRight} from 'react-icons/fa'
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -229,7 +230,7 @@ function ProductList() {
 
                 <div className="card mb-6">
                   <div className="card-body status-flex">
-                    <div className="btn_active mb-3">
+                    <div className="btn_active mb-3 margin-right ">
                       <button
                         className={`btn btn-sm me-2 ${filters.status === '' ? 'btn-success' : 'btn-outline-success'}`}
                         onClick={() => setFilters({ status: '', search: '', page: 1 })}
@@ -324,6 +325,8 @@ function ProductList() {
                       <th>Tình trạng</th>
                       <th>Giá tiền</th>
                       <th>Danh mục</th>
+                     
+                      <th>Nổi Bật</th>
                       <th>Chức năng</th>
                     </tr>
                   </thead>
@@ -353,8 +356,9 @@ function ProductList() {
                             {item.trang_thai}
                           </span>
                         </td>
-                        <td>{item.gia}</td>
+<td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.gia)}</td>
                         <td>{item.ten_danh_muc || 'Chưa rõ'}</td>
+                        <td>{item.noi_bat===0 ?'không nổi bật':'nổi bật' }</td>
                         <td className='button-action'>
                           <button className="btn btn-primary btn-sm trash" title="Xóa" onClick={() => hanldDelete(item.id_san_pham)} >
                             <i className="fa-solid fa-trash"></i>
@@ -400,16 +404,17 @@ function ProductList() {
         </div>
 
         <nav>
-          <ul className="pagination">
-            <li className="page-item">
+          <ul className="pagination "> 
+            <li className="page-item ">
               <button
                 className="page-link"
                 onClick={() => setFilters((prev) => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
               >
-                Trang trước
+                <FaArrowLeft />
+
               </button>
             </li>
-            {[1, 2, 3].map((p) => (
+            {[1, 2, 3 , 4, 5].map((p) => (
               <li key={p} className={`page-item ${filters.page === p ? 'active' : ''}`}>
                 <button className="page-link" onClick={() => setFilters((prev) => ({ ...prev, page: p }))}>
                   {p}
@@ -418,7 +423,8 @@ function ProductList() {
             ))}
             <li className="page-item">
               <button className="page-link" onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}>
-                Kế tiếp
+             
+   <FaArrowRight />
               </button>
             </li>
           </ul>

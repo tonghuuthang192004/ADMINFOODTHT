@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import AppHeader from '../utils/header/header';
 import Sidebar from '../utils/sidebar/sidebar';
@@ -9,13 +9,12 @@ import { Editor } from '@tinymce/tinymce-react';
 const AddProduct = () => {
   const [category, setCategory] = useState([]);
   const [preview, setPreview] = useState(null);
-
   const editorRef = useRef(null);
 
   // THÔNG BÁO 
-  const [errorMessage,setErrorMessage]=useState('');
-  const [suscces,setSuscces]=useState('')
-  //END THÔNG BÁO
+  const [errorMessage, setErrorMessage] = useState('');
+  const [success, setSuccess] = useState('');
+
   useEffect(() => {
     const fetchCategory = async () => {
       try {
@@ -36,6 +35,7 @@ const AddProduct = () => {
     mo_ta: '',
     trang_thai: '',
     deleted: 0,
+    noi_bat: 0         // Nổi bật (0 hoặc 1)
   });
 
   const [image, setImage] = useState(null);
@@ -43,7 +43,7 @@ const AddProduct = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
@@ -56,7 +56,7 @@ const AddProduct = () => {
 
   const handleRemoveImage = () => {
     setImage(null);
-    setFileName("");
+    setFileName('');
     setPreview(null);
   };
 
@@ -71,6 +71,7 @@ const AddProduct = () => {
     formDataToSend.append('mo_ta', formData.mo_ta);
     formDataToSend.append('trang_thai', formData.trang_thai);
     formDataToSend.append('deleted', 0);
+    formDataToSend.append('noi_bat', formData.noi_bat);              // Nổi bật
     formDataToSend.append('ngay_tao', now);
     formDataToSend.append('ngay_cap_nhat', now);
     if (image) {
@@ -78,18 +79,17 @@ const AddProduct = () => {
     }
 
     try {
-     const response = await axios.post(
-    'http://localhost:3000/admin/products/create-product',
-    formDataToSend
-  );
- Swal.fire({
-  icon: 'success',
-  title: 'Thành công',
-  text: 'Thêm sản phẩm thành công!',
-  timer: 2000,
-  showConfirmButton: false
-});
-
+      const response = await axios.post(
+        'http://localhost:3000/admin/products/create-product',
+        formDataToSend
+      );
+      Swal.fire({
+        icon: 'success',
+        title: 'Thành công',
+        text: 'Thêm sản phẩm thành công!',
+        timer: 2000,
+        showConfirmButton: false,
+      });
 
       setFormData({
         ten: '',
@@ -98,22 +98,23 @@ const AddProduct = () => {
         mo_ta: '',
         trang_thai: '',
         deleted: 0,
+        noi_bat: 0          // Reset giá trị
       });
       setImage(null);
       setFileName('');
       setPreview(null);
     } catch (err) {
-  Swal.fire({
-  icon: 'error',
-  title: 'Lỗi',
-  text: err.response?.data?.error || 'Đã xảy ra lỗi khi thêm sản phẩm'
-});
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: err.response?.data?.error || 'Đã xảy ra lỗi khi thêm sản phẩm',
+      });
     }
   };
 
   return (
     <>
-      <AdminLayOut/>
+      <AdminLayOut />
       <main className="app-content">
         <div className="app-title">
           <ul className="app-breadcrumb breadcrumb">
@@ -125,15 +126,9 @@ const AddProduct = () => {
         </div>
         <div className="tile">
           <h3 className="tile-title">Tạo mới sản phẩm</h3>
-          {errorMessage && (
-  <div style={{ color: 'red', marginBottom: '10px' }}>{errorMessage}</div>
-)}
 
-{suscces && (
-  <div style={{ color: 'green', marginBottom: '10px' }}>{suscces}</div>
-)}
-
-          <form className="row" onSubmit={handleSubmit} encType="multipart/form-data" >
+          <form className="row" onSubmit={handleSubmit} encType="multipart/form-data">
+            {/* Tên sản phẩm */}
             <div className="form-group col-md-3">
               <label>Tên sản phẩm</label>
               <input
@@ -145,6 +140,8 @@ const AddProduct = () => {
                 required
               />
             </div>
+
+            {/* Giá sản phẩm */}
             <div className="form-group col-md-3">
               <label>Giá bán</label>
               <input
@@ -157,6 +154,8 @@ const AddProduct = () => {
                 required
               />
             </div>
+
+            {/* Tình trạng */}
             <div className="form-group col-md-3">
               <label>Tình trạng</label>
               <select
@@ -171,6 +170,8 @@ const AddProduct = () => {
                 <option value="inactive">Inactive</option>
               </select>
             </div>
+
+            {/* Danh mục */}
             <div className="form-group col-md-3">
               <label>Danh mục</label>
               <select
@@ -189,10 +190,28 @@ const AddProduct = () => {
               </select>
             </div>
 
-            <div className="form-group col-md-12" >
+            {/* Số lượng kho */}
+           
+
+            {/* Nổi bật */}
+            <div className="form-group col-md-3">
+              <label>Nổi bật</label>
+              <select
+                name="noi_bat"
+                className="form-control"
+                value={formData.noi_bat}
+                onChange={handleChange}
+                required
+              >
+                <option value="0">Không nổi bật</option>
+                <option value="1">Nổi bật</option>
+              </select>
+            </div>
+
+            {/* Ảnh sản phẩm */}
+            <div className="form-group col-md-12">
               <label>Ảnh sản phẩm</label>
               <input
-                
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
@@ -228,39 +247,29 @@ const AddProduct = () => {
               {fileName && <p style={{ marginTop: '10px' }}>{fileName}</p>}
             </div>
 
-           <div className="form-group col-md-12">
-  <label>Mô tả sản phẩm</label>
-  <Editor
-    apiKey="9kyol25jpp20dl4q5gszb4weywn41lgftl28za01bhkknycn" // Hoặc để trống nếu dùng local
-    value={formData.mo_ta}
-    onEditorChange={(content) =>
-      setFormData((prev) => ({ ...prev, mo_ta: content }))
-     // setFormData()); // ✅
-
-    }
-    init={{
-      height: 300,
-      menubar: false,
-      plugins: [
-        'advlist autolink lists link image charmap preview anchor',
-        'searchreplace visualblocks code fullscreen',
-        'insertdatetime media table paste code help wordcount'
-      ],
-      toolbar:
-        'undo redo | formatselect | bold italic backcolor | ' +
-        'alignleft aligncenter alignright alignjustify | ' +
-        'bullist numlist outdent indent | removeformat | help'
-    }}
-  />
-</div>
-
+            {/* Mô tả sản phẩm */}
             <div className="form-group col-md-12">
-              <button className="btn btn-save" type="submit">
-                Lưu lại
+              <label>Mô tả sản phẩm</label>
+              <Editor
+              apiKey="9kyol25jpp20dl4q5gszb4weywn41lgftl28za01bhkknycn"
+                onInit={(evt, editor) => (editorRef.current = editor)}
+                value={formData.mo_ta}
+                init={{
+                  height: 300,
+                  menubar: false,
+                  plugins: ['lists', 'link', 'image', 'table', 'code'],
+                  toolbar:
+                    'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link image',
+                }}
+                onEditorChange={(newValue) => setFormData({ ...formData, mo_ta: newValue })}
+              />
+            </div>
+
+            {/* Submit Button */}
+            <div className="form-group col-md-12">
+              <button type="submit" className="btn btn-primary">
+                Thêm sản phẩm
               </button>
-              <a className="btn btn-cancel" href="/product-list" style={{ marginLeft: '10px' }}>
-                Hủy bỏ
-              </a>
             </div>
           </form>
         </div>
@@ -270,3 +279,4 @@ const AddProduct = () => {
 };
 
 export default AddProduct;
+

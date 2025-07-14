@@ -15759,3 +15759,11 @@ padding: 5px 12px;
 /* .text-aligment{
   text-align: center;
 } */
+.item-select select{
+  border: none;
+  padding: auto;
+  font-size: 15px;
+  width: 200px;
+  height: auto;
+  text-align: center;
+}

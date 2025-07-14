@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import Swal from 'sweetalert2';
 import AdminLayOut from '../adminLayOut';
 import { Editor } from '@tinymce/tinymce-react';
 
@@ -16,6 +16,7 @@ function EditProduct() {
     mo_ta: '',
     hinh_anh: null,
     hinh_anh_cu: '', // Để lưu ảnh cũ
+    noi_bat: 0,      // Nổi bật
   });
 
   const [categories, setCategories] = useState([]);
@@ -41,7 +42,8 @@ function EditProduct() {
           trang_thai: data.trang_thai,
           id_danh_muc: data.id_danh_muc, // Gán danh mục cho sản phẩm
           mo_ta: data.mo_ta,
-          hinh_anh: data.hinh_anh, // không load ảnh cũ vào input file
+          hinh_anh: data.hinh_anh, 
+            noi_bat: data.noi_bat,   // Nổi bật
           
         });
       })
@@ -66,6 +68,7 @@ function EditProduct() {
     formData.append('trang_thai', product.trang_thai);
     formData.append('id_danh_muc', product.id_danh_muc);
     formData.append('mo_ta', product.mo_ta);
+        formData.append('noi_bat', product.noi_bat); // Thêm trường nổi bật
 
     if (product.hinh_anh) {
       formData.append('hinh_anh', product.hinh_anh);
@@ -80,7 +83,7 @@ function EditProduct() {
       });
 
       if (response.ok) {
-        alert('Cập nhật sản phẩm thành công!');
+          Swal.fire('Cập nhật nhật sản phẩm thành công!', 'Thành Công.', 'success');
         navigate('/admin/Product');
       } else {
         const data = await response.json();
@@ -165,6 +168,17 @@ function EditProduct() {
     onChange={handleFileChange} 
   />
 </div>
+<div className="form-group col-md-3">
+  <label>Nổi Bật</label>
+  <select name="noi_bat" className="form-control" required value={product.noi_bat} onChange={handleChange}>
+    <option value="">-- Chọn tình trạng --</option>
+    <option value="1">Nổi Bật</option>
+    <option value="0">Không Nổi Bật</option>
+  </select>
+</div>
+
+
+
 
             {/* <div className="form-group col-md-12">
               <label>Mô tả sản phẩm</label>

@@ -87,11 +87,11 @@ function AddDisCountManger() {
                     </div>
                     <div className="form-group">
                       <label>Giá trị</label>
-                      <input type="number" className="form-control" name="gia_tri" value={formData.gia_tri} onChange={handleChange} />
+                      <input type="number"  min='0'className="form-control" name="gia_tri" value={formData.gia_tri} onChange={handleChange} />
                     </div>
                     <div className="form-group">
-                      <label>Điều kiện</label>
-                      <input type="text" className="form-control" name="dieu_kien" value={formData.dieu_kien} onChange={handleChange} />
+                      {/* <label>Điều kiện</label> */}
+                      {/* <input type="hidden" className="form-control" name="dieu_kien" value={formData.dieu_kien} onChange={handleChange} /> */}
                     </div>
                     <div className="form-group">
                       <label>Ngày bắt đầu</label>
@@ -103,7 +103,7 @@ function AddDisCountManger() {
                     </div>
                     <div className="form-group">
                       <label>Số lượng</label>
-                      <input type="number" className="form-control" name="so_luong" value={formData.so_luong} onChange={handleChange} />
+                      <input type="number" className="form-control" min='0'name="so_luong" value={formData.so_luong} onChange={handleChange} />
                     </div>
                   <div className="form-group">
   <label>Trạng thái</label>
